@@ -41,7 +41,96 @@ $(function(){
 				)
 			)
 
-		}	  
+		}
+		var dbProblems = data["DatabaseInconsistencies"];
+		var dbProblems_pg = $("#DbProblems").find(".panel-group");
+		// set header for db inconsistencies
+		$("#numberOfDbProblems").html(dbProblems.length);
+		if(dbProblems.length==0) {
+			$("#DbProblems").addClass("hidden");
+		}
+		// fill db inconsistencies
+		for (i = 0; i < dbProblems.length; i++) {
+			dbProblems_pg.append(
+				// this will depend on what we put in the json
+			)
+		}
+		// plots
+		var statistics = data["SampleStatistics"];
+		var sampleNevents = statistics["sampleNevents"];
+		var sampleNeventsTimeprof = statistics["sampleNeventsTimeprof"];
+		var sampleNeventsProcessed = statistics["sampleNeventsProcessed"];
+		var sampleNeventsProcessedTimeprof = statistics["sampleNeventsProcessedTimeprof"];
+		var sampleTypes = statistics["sampleTypes"];
+    		$('#typePlotContainer').highcharts({
+    		    chart: {
+    		        type: 'pie',
+    		        options3d: {
+    		            enabled: true,
+    		            alpha: 45,
+    		            beta: 0
+    		        }
+    		    },
+    		    title: {
+    		        text: ''
+    		    },
+    		    tooltip: {
+    		        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    		    },
+    		    plotOptions: {
+    		        pie: {
+    		            allowPointSelect: true,
+    		            cursor: 'pointer',
+    		            depth: 35,
+    		            dataLabels: {
+    		                enabled: true,
+    		                format: '{point.name}'
+    		            }
+    		        }
+    		    },
+    		    series: [{
+    		        type: 'pie',
+    		        name: 'Samples share',
+			data: sampleTypes
+    		    }]
+    		});
+		console.log(sampleTypes)
+		$("#typePlotContainer").siblings().filter(".panel-heading").html("Samples type")
+		var samplesTimeprof = statistics["samplesTimeprof"];
+		var sampleAuthors = statistics["sampleAuthors"];
+    		$('#authorsPlotContainer').highcharts({
+    		    chart: {
+    		        type: 'pie',
+    		        options3d: {
+    		            enabled: true,
+    		            alpha: 45,
+    		            beta: 0
+    		        }
+    		    },
+    		    title: {
+    		        text: ''
+    		    },
+    		    tooltip: {
+    		        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    		    },
+    		    plotOptions: {
+    		        pie: {
+    		            allowPointSelect: true,
+    		            cursor: 'pointer',
+    		            depth: 35,
+    		            dataLabels: {
+    		                enabled: true,
+    		                format: '{point.name}'
+    		            }
+    		        }
+    		    },
+    		    series: [{
+    		        type: 'pie',
+    		        name: 'Samples share',
+			data: sampleAuthors
+    		    }]
+    		});
+		$("#authorsPlotContainer").siblings().filter(".panel-heading").html("Samples author")
 	} );
 
 });

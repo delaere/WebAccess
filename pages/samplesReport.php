@@ -43,9 +43,25 @@
                     <!-- /.col-lg-12 -->
                 </div>
                 <!-- /.row -->
-		<div class="row">
-
             <div class="row">
+                    <div class="col-lg-6 col-xs-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                Samples Author
+                            </div>
+                            <div class="panel-body" id="authorsPlotContainer">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-xs-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                Sample Types
+                            </div>
+                            <div class="panel-body" id="typePlotContainer">
+                            </div>
+                        </div>
+                    </div>
                 <div class="col-lg-12">
                     <div class="panel panel-primary" id="MissingDirSamples">
                         <div class="panel-heading">
@@ -54,6 +70,7 @@
                         <!-- .panel-heading -->
                         <div class="panel-body">
                             <div class="panel-group" id="accordion">
+				<p>The following samples are pointing to non-existant locations on the server.</p>
                             </div>
                         </div>
                         <!-- .panel-body -->
@@ -62,15 +79,12 @@
                 </div>
                 <!-- /.col-lg-12 -->
 		    <div class="col-lg-12 col-xs-12">
-                        <div class="panel panel-primary">
+                        <div class="panel panel-primary" id="DbProblems">
                             <div class="panel-heading">
-                                Database Inconsistencies
+				Database Inconsistencies <span class="badge" id="numberOfDbProblems">0</span>
                             </div>
                             <div class="panel-body">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
-                            </div>
-                            <div class="panel-footer">
-                                Panel Footer
+				<p>The following samples have inconsitencies in their relation to other entries.</p>
                             </div>
                         </div>
                     </div>
@@ -117,19 +131,6 @@
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 sampleNevents
-                            </div>
-                            <div class="panel-body">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
-                            </div>
-                            <div class="panel-footer">
-                                Panel Footer
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-xs-12">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                Sample Types
                             </div>
                             <div class="panel-body">
                                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
@@ -143,19 +144,6 @@
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 Time profile
-                            </div>
-                            <div class="panel-body">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
-                            </div>
-                            <div class="panel-footer">
-                                Panel Footer
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-xs-12">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                Authors
                             </div>
                             <div class="panel-body">
                                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
