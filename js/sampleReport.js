@@ -58,9 +58,115 @@ $(function(){
 		// plots
 		var statistics = data["SampleStatistics"];
 		var sampleNevents = statistics["sampleNevents"];
+		$('#sampleNevents').highcharts({
+		        series: [{
+			    name: "SAMADhi",
+		            data: sampleNevents
+		        }],
+		        
+		        chart: {
+		            type: 'column'
+		        },
+			title: {
+		            text: ''
+						            
+			},
+		        yAxis: { 
+		            type: 'logarithmic' 
+		        },
+		        plotOptions: {
+		    		column: {
+		        		pointPadding: 0,
+		        		borderWidth: 0,
+		        		groupPadding: 0,
+		        		shadow: false
+		    		}
+			}
+		});
 		var sampleNeventsTimeprof = statistics["sampleNeventsTimeprof"];
+		$('#sampleNeventsTimeprof').highcharts({
+			chart: {
+		            type: 'spline'
+						            
+			},
+			title: {
+		            text: ''
+						            
+			},
+			xAxis: {
+			    type: 'datetime'
+			},
+			        
+			plotOptions: {
+				spline: {
+					marker: {
+						                    enabled: true
+					}
+						            
+				}
+					        
+			},
+			series: [{
+			    name: "SAMADhi",
+			    data: sampleNeventsTimeprof
+			}]
+			    
+		});
 		var sampleNeventsProcessed = statistics["sampleNeventsProcessed"];
+		$('#sampleNeventsProcessed').highcharts({
+		        series: [{
+			    name: "SAMADhi",
+		            data: sampleNeventsProcessed
+		        }],
+		        
+		        chart: {
+		            type: 'column'
+		        },
+			title: {
+		            text: ''
+						            
+			},
+		        yAxis: { 
+		            type: 'logarithmic' 
+		        },
+		        plotOptions: {
+		    		column: {
+		        		pointPadding: 0,
+		        		borderWidth: 0,
+		        		groupPadding: 0,
+		        		shadow: false
+		    		}
+			}
+		});
 		var sampleNeventsProcessedTimeprof = statistics["sampleNeventsProcessedTimeprof"];
+		$('#sampleNeventsProcessedTimeprof').highcharts({
+			chart: {
+		            type: 'spline'
+						            
+			},
+			title: {
+		            text: ''
+						            
+			},
+			xAxis: {
+			    type: 'datetime'
+			},
+			        
+			plotOptions: {
+				spline: {
+					marker: {
+						                    enabled: true
+					}
+						            
+				}
+					        
+			},
+			series: [{
+			    name: "SAMADhi",
+			    data: sampleNeventsProcessedTimeprof
+			}]
+			    
+		});
 		var sampleTypes = statistics["sampleTypes"];
     		$('#typePlotContainer').highcharts({
     		    chart: {

@@ -62,6 +62,7 @@
                             </div>
                         </div>
                     </div>
+            </div><div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-primary" id="MissingDirSamples">
                         <div class="panel-heading">
@@ -93,11 +94,7 @@
                             <div class="panel-heading">
                                 sampleNeventsTimeprof
                             </div>
-                            <div class="panel-body">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
-                            </div>
-                            <div class="panel-footer">
-                                Panel Footer
+                            <div class="panel-body" id="sampleNeventsTimeprof">
                             </div>
                         </div>
                     </div>
@@ -106,40 +103,29 @@
                             <div class="panel-heading">
                                 sampleNevents
                             </div>
-                            <div class="panel-body">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
-                            </div>
-                            <div class="panel-footer">
-                                Panel Footer
+                            <div class="panel-body" id="sampleNevents">
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6 col-xs-12">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
-                                sampleNeventsTimeprof
+                                sampleNeventsProcessedTimeprof
                             </div>
-                            <div class="panel-body">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
-                            </div>
-                            <div class="panel-footer">
-                                Panel Footer
+                            <div class="panel-body" id="sampleNeventsProcessedTimeprof">
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6 col-xs-12">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
-                                sampleNevents
+                                sampleNeventsProcessed
                             </div>
-                            <div class="panel-body">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
-                            </div>
-                            <div class="panel-footer">
-                                Panel Footer
+                            <div class="panel-body" id="sampleNeventsProcessed">
                             </div>
                         </div>
                     </div>
+<!--
                     <div class="col-lg-6 col-xs-12">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
@@ -152,7 +138,8 @@
                                 Panel Footer
                             </div>
                         </div>
-                    </div>
+		    </div>
+-->
                 </div>
                 <!-- /.row -->
             </div>
