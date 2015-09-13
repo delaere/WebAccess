@@ -46,8 +46,7 @@
                     </div>
                 </div>
                 <!-- /.row -->
-                <div class="row">
-                    <div class="col-lg-4 well" id="drawing" ></div>
+                <div class="row" id="histoGrid" style="padding:10px;">
                 </div>
                 <!-- /.row -->
             </div>

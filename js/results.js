@@ -3,41 +3,36 @@
 // called when ROOT is ready
 function createmyGUI() {
     // absolute file path can be used as well
-    var filename = "../data/controlPlots_ttbar.root";
+    var filename = "../data/controlPlots_ttbar.root"; //TODO: this should be selectable... some intermediate page needed db -> path
     new JSROOT.TFile(filename, onFileOpen);
 }
 
 // called when the file is open
 function onFileOpen(file) {
-      window.fileObj = file; // for debugging
-      window.fileStructure = parseDirectory(file,file,"",buildFileStructure);
+    window.fileObj = file; // for debugging
+    window.fileStructure = parseDirectory(file,file,"",buildFileStructure);
+    window.drawings = []; // for redraw on resize
 
     var activeDir = QueryString.dir;
+    var histoGrid = $("#histoGrid");
     // display the first plot (test)
     if(activeDir != undefined) {
-      //TODO: get the first TH1F in the dir. (just an example)
+        file.ReadDirectory(activeDir,function(dir) {
+            var dirkeys = dir.fKeys;
+            for(var i=0;i<dirkeys.length;i++) {
+                if(dirkeys[i].fClassName==="TH1F") { //TODO: extend the list to TCanvas and others. Try first.
+                    // prepare the html container
+//                    $('<div/>', {id:"drawing_"+dirkeys[i].fName} ).addClass("col-lg-3 well col-sm-4 col-xs-6 well well-sm drawing").appendTo(histoGrid);
+                    $('<div/>', {class:"col-lg-4 col-sm-4 col-xs-12 panel panel-primary"}).append($('<div/>', {class:"panel-body drawing", id:"drawing_"+dirkeys[i].fName})).appendTo(histoGrid);
 
-    file.ReadDirectory(activeDir,function(dir) {
-        var dirkeys = dir.fKeys;
-        for(var i=0;i<dirkeys.length;i++) {
-            if(dirkeys[i].fClassName==="TH1F") {
-                file.ReadObject(activeDir+"/"+dirkeys[i].fName, function(obj) {
-                    JSROOT.draw("drawing", obj, "");
-                    window.objPlot = obj; // for debugging
-                });
-		break;
+                    // draw in it
+                    file.ReadObject(activeDir+"/"+dirkeys[i].fName, function(obj) {
+                        JSROOT.draw("drawing_"+obj.fName, obj, "");
+                        window.drawings.push(obj);
+                    });
+                }
             }
-        }
-    });
-
-    } else {
-    // default
-        //new JSROOT.TFile(filename, function(file) {
-        //   file.ReadObject("stage_5/top/bestHmass", function(obj) {
-        //      JSROOT.draw("drawing", obj, "");
-        //      window.objPlot = obj;
-        //   });
-        //});
+        });
     }
 }
 
@@ -88,8 +83,11 @@ function generateHtmlTree(rootElement,tree){
 
 // redraw on resize
 $(window).resize(function() {
-  $("#drawing").html("");
-  JSROOT.draw("drawing", window.objPlot, "");
+  for(var i=0;i<window.drawings.length;i++) {
+      obj = window.drawings[i];
+      $("#drawing_"+obj.fName).html("");
+      JSROOT.draw("drawing_"+obj.fName, obj, "");
+  }
 });
 
 $(function(){
