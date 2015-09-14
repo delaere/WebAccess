@@ -24,12 +24,6 @@ function onFileOpen(file) {
                     // prepare the html container
                       $('<div/>', {class:"col-lg-3 col-sm-4 col-xs-12"})
                          .append($('<div/>',{class:"panel panel-primary drawingpanel"})
-//                                   .append($('<div/>',{class:"panel-heading drawing-header"})
-//                                            .append($('<button/>',{type:"button", class:"btn btn-primary btn-circle", id:"btn"+dirkeys[i].fName})
-//                                               .append($('<i/>', {class:"fa fa-search"} ))
-//                                                   )
-//                                            .append($('<span/>').html("  "+dirkeys[i].fName))
-//                                          )
                                    .append($('<div/>', {class:"panel-body drawing", id:"drawing_"+dirkeys[i].fName}))
                                 )
                          .appendTo(histoGrid);
@@ -93,9 +87,10 @@ function generateHtmlTree(rootElement,tree){
 $(window).resize(redrawAll);
 function redrawAll() {
   for(var i=0;i<window.drawings.length;i++) {
-      obj = window.drawings[i];
-      $("#drawing_"+obj.fName).html("");
-      JSROOT.redraw("drawing_"+obj.fName, obj, "");
+      var objtoDraw = window.drawings[i];
+      console.log(objtoDraw.fName);
+      $("#drawing_"+objtoDraw.fName).html("");
+      JSROOT.redraw("drawing_"+objtoDraw.fName, objtoDraw, "");
   }
   drawModal();
 }
@@ -123,7 +118,7 @@ $(function(){
 	 // display
 	 $("#histoZoom").toggle(400);
 	 $("#histoGrid").toggle(400);
-         JSROOT.redraw("modal_plot", obj, "");
+         //JSROOT.redraw("modal_plot", obj, "");
 	 // wait for the modal to appear before drawing
 	 window.setTimeout(drawModal,500);
      });
@@ -137,9 +132,10 @@ $(function(){
 
 function drawModal() {
 	// get obj
-	var obj = window.drawings[($('#myModalLabel').attr("drawing"))];
+	var objModal = window.drawings[($('#myModalLabel').attr("drawing"))];
 	// plot
-	JSROOT.redraw("modal_plot", obj, "");
+	$("#modal_plot").html("");
+	JSROOT.redraw("modal_plot", objModal, "");
 }
 
 var QueryString = function () {
