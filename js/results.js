@@ -22,9 +22,17 @@ function onFileOpen(file) {
             for(var i=0;i<dirkeys.length;i++) {
                 if(dirkeys[i].fClassName==="TH1F") { //TODO: extend the list to TCanvas and others. Try first.
                     // prepare the html container
-//                    $('<div/>', {id:"drawing_"+dirkeys[i].fName} ).addClass("col-lg-3 well col-sm-4 col-xs-6 well well-sm drawing").appendTo(histoGrid);
-                    $('<div/>', {class:"col-lg-4 col-sm-4 col-xs-12 panel panel-primary"}).append($('<div/>', {class:"panel-body drawing", id:"drawing_"+dirkeys[i].fName})).appendTo(histoGrid);
-
+                      $('<div/>', {class:"col-lg-3 col-sm-4 col-xs-12"})
+                         .append($('<div/>',{class:"panel panel-primary drawingpanel"})
+//                                   .append($('<div/>',{class:"panel-heading drawing-header"})
+//                                            .append($('<button/>',{type:"button", class:"btn btn-primary btn-circle", id:"btn"+dirkeys[i].fName})
+//                                               .append($('<i/>', {class:"fa fa-search"} ))
+//                                                   )
+//                                            .append($('<span/>').html("  "+dirkeys[i].fName))
+//                                          )
+                                   .append($('<div/>', {class:"panel-body drawing", id:"drawing_"+dirkeys[i].fName}))
+                                )
+                         .appendTo(histoGrid);
                     // draw in it
                     file.ReadObject(activeDir+"/"+dirkeys[i].fName, function(obj) {
                         JSROOT.draw("drawing_"+obj.fName, obj, "");
@@ -82,16 +90,57 @@ function generateHtmlTree(rootElement,tree){
 }
 
 // redraw on resize
-$(window).resize(function() {
+$(window).resize(redrawAll);
+function redrawAll() {
   for(var i=0;i<window.drawings.length;i++) {
       obj = window.drawings[i];
       $("#drawing_"+obj.fName).html("");
-      JSROOT.draw("drawing_"+obj.fName, obj, "");
+      JSROOT.redraw("drawing_"+obj.fName, obj, "");
   }
-});
+  drawModal();
+}
 
 $(function(){
+     $('#histoGrid').on('dblclick',function(e) {
+	 // check that we actually clicked on a plot and get its name
+	 var hit = e.target.closest(".drawing");
+	 if(hit==null) return;
+	 var id = e.target.closest(".drawing").id;
+	 var name = id.substring(8,id.length);
+	 // find the object
+	 var obj=null;
+	 for(var i=0;i<window.drawings.length;i++) {
+		 if(window.drawings[i].fName==name) {
+			 obj = window.drawings[i];
+			 break;
+		 }
+	 }
+	 if(obj==null) return;
+	 // prepare the modal window
+	 // title
+	 $('#myModalLabel').html(obj.fTitle);
+	 $('#myModalLabel').attr("drawing",i);
+	 // display
+	 $("#histoZoom").toggle(400);
+	 $("#histoGrid").toggle(400);
+         JSROOT.redraw("modal_plot", obj, "");
+	 // wait for the modal to appear before drawing
+	 window.setTimeout(drawModal,500);
+     });
+     $('#histoZoom').on('dblclick',function(e) {
+	 // display
+	 $("#histoZoom").toggle(400);
+	 $("#histoGrid").toggle(400);
+	 window.setTimeout(redrawAll,500);
+     });
 });
+
+function drawModal() {
+	// get obj
+	var obj = window.drawings[($('#myModalLabel').attr("drawing"))];
+	// plot
+	JSROOT.redraw("modal_plot", obj, "");
+}
 
 var QueryString = function () {
   // This function is anonymous, is executed immediately and 
