@@ -2,20 +2,28 @@
 
 // called when ROOT is ready
 function createmyGUI() {
-    // absolute file path can be used as well
-    var filename = "../data/controlPlots_ttbar.root"; //TODO: this should be selectable... some intermediate page needed db -> path
-    new JSROOT.TFile(filename, onFileOpen);
+    window.drawings = [];
+    window.filename = QueryString.result;
+    $.getJSON( "../data/results.json", createGUI);
+}
+
+// actually build the GUI after reading json 
+function createGUI(data) {
+    // fill in the combo box
+    loadAvailableResults(data);
+    // set the filename: 1. from URL (above); 2. from the combo
+    if(window.filename === undefined) {
+        window.filename = $('#inputFile option:selected').text();
+    }
+    if(window.filename === "") return;
+    new JSROOT.TFile(window.filename, onFileOpen);
 }
 
 // called when the file is open
 function onFileOpen(file) {
-    window.fileObj = file; // for debugging
     window.fileStructure = parseDirectory(file,file,"",buildFileStructure);
-    window.drawings = []; // for redraw on resize
-
     var activeDir = QueryString.dir;
     var histoGrid = $("#histoGrid");
-    // display the first plot (test)
     if(activeDir != undefined) {
         file.ReadDirectory(activeDir,function(dir) {
             var dirkeys = dir.fKeys;
@@ -61,7 +69,7 @@ function parseDirectory(dir,file,path, callback) {
 // once the file has been parsed, build the HTML
 function buildFileStructure() {
 	window.fileStructure.sort(function(a,b){ return a.name>b.name; });
-	$("#fileTree").html($("<li/>").html($("<a/>").attr('href','#').html("ROOT file")));
+	$("#fileTree").html($("<li/>").html($("<a/>").attr('href','#').html(window.filename)));
 	generateHtmlTree($("#fileTree").find("li"),window.fileStructure);
 	$('#fileTree').treed();
 }
@@ -78,7 +86,19 @@ function generateHtmlTree(rootElement,tree){
 			rootElement.append($("<li/>").html(tree[i].title));
 			generateHtmlTree(rootElement.find("li").last(),tree[i].content);
 		} else {
-			rootElement.append($("<li/>").html($("<a/>").attr('href','?dir='+tree[i].name).html(tree[i].title)));
+			rootElement.append($("<li/>").html($("<a/>").attr('href','?result='+encodeURIComponent(window.filename)+'&dir='+tree[i].name).html(tree[i].title)));
+		}
+	}
+}
+
+// load the json with available results
+function loadAvailableResults(data) {
+	var results = data.availableResults;
+	var inputs = $("#inputFile");
+	for(var i=0;i<results.length;i++){
+		inputs.append($("<option/>").html(results[i]));
+		if(results[i]===window.filename) {
+			$('#inputFile')[0].selectedIndex = i;
 		}
 	}
 }
@@ -95,6 +115,7 @@ function redrawAll() {
   drawModal();
 }
 
+// register event handlers
 $(function(){
      $('#histoGrid').on('dblclick',function(e) {
 	 // check that we actually clicked on a plot and get its name
@@ -128,8 +149,13 @@ $(function(){
 	 $("#histoGrid").toggle(400);
 	 window.setTimeout(redrawAll,500);
      });
+     $('#inputFile').on('change',function(e){
+	 var newfilename = $("#inputFile option:selected").text();
+	 window.location=window.location.origin+window.location.pathname+"?result="+encodeURIComponent(newfilename);
+     });
 });
 
+// draw the modal window
 function drawModal() {
 	// get obj
 	var objModal = window.drawings[($('#myModalLabel').attr("drawing"))];
@@ -138,6 +164,7 @@ function drawModal() {
 	JSROOT.redraw("modal_plot", objModal, "");
 }
 
+// decode the URL
 var QueryString = function () {
   // This function is anonymous, is executed immediately and 
   // the return value is assigned to QueryString!

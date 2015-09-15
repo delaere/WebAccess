@@ -43,6 +43,15 @@
                     <div class="col-md-4 well ">
                         <ul id="fileTree"></ul>
                     </div>
+                    <div class="col-md-8">
+                      <form role="form">
+                        <div class="form-group">
+                          <label for="sel1">Select result:</label>
+                          <select class="form-control" id="inputFile">
+                          </select>
+                        </div>
+                      </form>
+                    </div>
                 </div>
                 <div class="row" id="histoZoom" style="display: none;">
                    <div class="col-lg-12">
