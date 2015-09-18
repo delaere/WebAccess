@@ -4,7 +4,7 @@
 function createmyGUI() {
     window.drawings = [];
     window.filename = QueryString.result;
-    $.getJSON( "../data/results.json", createGUI);
+    $.getJSON( "../data/ResultsAnalysisReport.json", createGUI);
 }
 
 // actually build the GUI after reading json 
@@ -28,7 +28,9 @@ function onFileOpen(file) {
         file.ReadDirectory(activeDir,function(dir) {
             var dirkeys = dir.fKeys;
             for(var i=0;i<dirkeys.length;i++) {
-                if(dirkeys[i].fClassName==="TH1F") { //TODO: extend the list to TCanvas and others. Try first.
+		console.log(dirkeys[i].fClassName)
+			//TODO: find another solution for TCanvas: it doesn't reproduce the full canvas, just the data part.
+	        if($.inArray( dirkeys[i].fClassName, [ "TH1F", "TCanvas" ]  )!== -1) { //TODO: extend the list to others. Try first.
                     // prepare the html container
                       $('<div/>', {class:"col-lg-3 col-sm-4 col-xs-12"})
                          .append($('<div/>',{class:"panel panel-primary drawingpanel"})
@@ -93,10 +95,10 @@ function generateHtmlTree(rootElement,tree){
 
 // load the json with available results
 function loadAvailableResults(data) {
-	var results = data.availableResults;
+	var results = data.SelectedResults;
 	var inputs = $("#inputFile");
 	for(var i=0;i<results.length;i++){
-		inputs.append($("<option/>").html(results[i]));
+		inputs.append($("<option/>").html(results[i][1]));
 		if(results[i]===window.filename) {
 			$('#inputFile')[0].selectedIndex = i;
 		}
