@@ -67,9 +67,12 @@
       }
     </script>
     <script language="javascript" type="text/javascript">
-      function ajax_info() {
+    function ajax_info() {
+        encodedfile = encodeURIComponent("/home/delaer/public_html/data/ZbblowMET_smallMll_RewFormformulaPol3NLO_PAS.root")
+	encodedcanvas = encodeURIComponent("Combined/jetmetMET")
+	console.log(encodedfile,encodedcanvas)
         $.ajax({
-        url:       "http://localhost/cgi-bin/getCanvas.py",
+        url:       "http://localhost/cgi-bin/getCanvas.py?file="+encodedfile+"&canvas="+encodedcanvas,
         cache:     false,
         dataType:  "text",
         data:      { mode: 'info' },

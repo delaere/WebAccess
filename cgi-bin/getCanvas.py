@@ -1,15 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-# enable debugging
+import cgi
 import cgitb
 cgitb.enable()
 import ROOT
 import tempfile
-f = ROOT.TFile("../data/ZbblowMET_smallMll_RewFormformulaPol3NLO_PAS.root")
-tcanvas = f.Get("Combined/jetmetMET")
-out = tempfile.NamedTemporaryFile(suffix=".svg")
-tcanvas.SaveAs(out.name)
-s = out.read()
 print "Content-Type: image/svg+xml"
 print
-print s
-
+parameters = cgi.FieldStorage()
+if parameters.has_key("file") and parameters.has_key("canvas"):
+    filename = parameters["file"].value
+    canvas = parameters["canvas"].value
+    f = ROOT.TFile(filename)
+    tcanvas = f.Get(canvas)
+    out = tempfile.NamedTemporaryFile(suffix=".svg")
+    tcanvas.SaveAs(out.name)
+    s = out.read()
+    print s
