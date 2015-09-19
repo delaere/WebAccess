@@ -28,8 +28,8 @@ function onFileOpen(file) {
         file.ReadDirectory(activeDir,function(dir) {
             var dirkeys = dir.fKeys;
             for(var i=0;i<dirkeys.length;i++) {
-		console.log(dirkeys[i].fClassName)
-			//TODO: find another solution for TCanvas: it doesn't reproduce the full canvas, just the data part.
+		//TODO: need another solution for TCanvas: it doesn't reproduce the full canvas, just the data part.
+		//dashboard demonstrates one solution with ajax + cgi to get a svg produced on the server
 	        if($.inArray( dirkeys[i].fClassName, [ "TH1F", "TCanvas" ]  )!== -1) { //TODO: extend the list to others. Try first.
                     // prepare the html container
                       $('<div/>', {class:"col-lg-3 col-sm-4 col-xs-12"})
@@ -105,6 +105,7 @@ function loadAvailableResults(data) {
 	}
 }
 
+//TODO: might not need to redraw: can directly act on svg dimensions
 // redraw on resize
 $(window).resize(redrawAll);
 function redrawAll() {

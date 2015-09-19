@@ -44,6 +44,11 @@
                        <div class="panel-heading">First plot</div>
                        <div class="panel-body" id="plot1"></div>
                     </div>
+                    <div class="panel panel-primary">
+		       <div class="panel-heading">Plot </div>
+		       <div class="panel-body" id="plot2">
+			</div>
+                    </div>
                 </div>
                 <!-- /.row -->
             </div>
@@ -55,6 +60,28 @@
     <!-- /#wrapper -->
 
     <?php include "stdScripts.html"; ?>
+
+    <script language="javascript" type="text/javascript">
+      function resizeIframe(obj) {
+         obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+      }
+    </script>
+    <script language="javascript" type="text/javascript">
+      function ajax_info() {
+        $.ajax({
+        url:       "http://localhost/cgi-bin/getCanvas.py",
+        cache:     false,
+        dataType:  "text",
+        data:      { mode: 'info' },
+        success:   function(result) { $("#plot2").html(result); var ratio = $("#plot2 svg").height()/$("#plot2 svg").width(); $("#plot2 svg").width($("#plot2").width()); $("#plot2 svg").height($("#plot2 svg").width()*ratio);  }
+    });
+    }
+
+    $(function () {
+	    ajax_info();
+    });
+	    </script>
+}
 
 </body>
 
