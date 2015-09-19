@@ -3,6 +3,7 @@
 // called when ROOT is ready
 function createmyGUI() {
     window.filename = QueryString.result;
+    if (QueryString.render==="true") $("#renderLocal").bootstrapToggle('on');
     //TODO change also from global to relative path when needed
     //TODO: one idea: both local and global names should be made available in the html in a php-generated snippet
     // see discussion there: http://stackoverflow.com/questions/1240462/php-convert-file-system-path-to-url
@@ -29,6 +30,8 @@ function createGUI(data) {
         window.filename = $('#inputFile option:selected').text();
     }
     if(window.filename === "") return;
+    // set data-id of the button to the result id
+    $('#SAMADhi').attr("data-id", data.SelectedResults[$('#inputFile')[0].selectedIndex][0]["result_id"]);
     // open the ROOT file
     new JSROOT.TFile(window.filename, onFileOpen);
 }
@@ -39,12 +42,15 @@ function onFileOpen(file) {
     var activeDir = QueryString.dir;
     var histoGrid = $("#histoGrid");
     window.elheight = -1;
+    var renderLocally = [ "TH1F"  ];
+    if($("#renderLocal").is(':checked')) {
+	    renderLocally.push("TCanvas");
+    }
     if(activeDir != undefined) {
         file.ReadDirectory(activeDir,function(dir) {
             dirkeys = dir.fKeys;
             for(var i=0;i<dirkeys.length;i++) {
-		//TODO we may keep an option to draw TCanvas using JSROOT in some cases
-	        if($.inArray( dirkeys[i].fClassName, [ "TH1F" ]  )!== -1) {
+	        if($.inArray( dirkeys[i].fClassName, renderLocally)!== -1) {
                     // prepare the html container
 			$('<div/>', {class:"col-lg-3 col-sm-4 col-xs-12"})
                              .append($('<div/>',{class:"panel panel-primary drawingpanel"})
@@ -67,7 +73,6 @@ function onFileOpen(file) {
 			}
                     });
 		} else if($.inArray( dirkeys[i].fClassName, [ "TCanvas" ]  )!== -1) { // this can be used to all objects not handled by JSROOT
-			//encodedfile = encodeURIComponent("/home/delaer/public_html/data/ZbblowMET_smallMll_RewFormformulaPol3NLO_PAS.root")
 			encodedfile = encodeURIComponent("/home/delaer/public_html/pages/"+window.filename)
 			encodedcanvas = encodeURIComponent(activeDir+"/"+dirkeys[i].fName)
 			$.ajax({
@@ -145,8 +150,8 @@ function generateHtmlTree(rootElement,tree){
 		if(tree[i].content.length>0) {
 			rootElement.append($("<li/>").html(tree[i].title));
 			generateHtmlTree(rootElement.find("li").last(),tree[i].content);
-		} else {
-			rootElement.append($("<li/>").html($("<a/>").attr('href','?result='+encodeURIComponent(window.filename)+'&dir='+tree[i].name).html(tree[i].title)));
+		} else { 
+			rootElement.append($("<li/>").html($("<a/>").attr('href','?result='+encodeURIComponent(window.filename)+"&render="+$("#renderLocal").is(':checked')+'&dir='+tree[i].name).html(tree[i].title)));
 		}
 	}
 }
@@ -212,12 +217,24 @@ $(function(){
      });
      $('#inputFile').on('change',function(e){
 	 var newfilename = $("#inputFile option:selected").text();
-	 window.location=window.location.origin+window.location.pathname+"?result="+encodeURIComponent(newfilename);
+	 window.location=window.location.origin+window.location.pathname+"?result="+encodeURIComponent(newfilename)+"&render="+$("#renderLocal").is(':checked');
      });
      $('#SAMADhi').click(function(){
-//TODO: the link has to be built from the active sample (info is in json)
-        var id = 1;
+        var id = $('#SAMADhi').attr("data-id");
 	window.open("http://cp3.irmp.ucl.ac.be/~delaere/level2/SAMADhi/index.php?-table=result&-action=browse&-cursor=0&-skip=0&-limit=30&-mode=list&-recordid=result%3Fresult_id%3D"+id);
+     });
+     $("#SAMADhi").mouseup(function(){
+	$(this).blur();
+     });
+     $("#renderLocal").change(function(){
+       var value = $("#renderLocal").is(':checked');
+       $("#fileTree a").each(function(){
+        if(value) {
+	  this.setAttribute("href",this.getAttribute("href").replace("render=false","render=true"));
+	} else {
+	  this.setAttribute("href",this.getAttribute("href").replace("render=true","render=false"));
+        }
+       });
      });
 });
 

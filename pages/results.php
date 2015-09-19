@@ -23,7 +23,7 @@
 
     <!-- Custom CSS specialization-->
     <link href="../dist/css/webAccess.css" rel="stylesheet">
-    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <link href="../bower_components/bootstrap-toggle/css/bootstrap-toggle.min.css" rel="stylesheet">
 
 
 </head>
@@ -54,10 +54,10 @@
                     </form>
                     <form role="form">
 		      <div class="col-lg-4 col-md-4 col-sm-8 col-xs-8 clearfix">
-			<input type="checkbox" data-toggle="toggle" data-width="100%" data-on="Render canvases using JSROOT" data-off="Render canvases on the server">
+			<input type="checkbox" data-toggle="toggle" data-width="100%" data-on="Render canvases using JSROOT" data-off="Render canvases on the server" id="renderLocal">
 		      </div>
 		      <div class="col-lg-4 col-xs-4 clearfix">
-			<button type="button" class="btn btn-primary btn-block" id="SAMADhi">Open in SAMADhi</button>
+			<button type="button" class="btn btn-success btn-block" id="SAMADhi">Open in SAMADhi</button>
 		      </div>
                     </form>
 		      <div class="col-lg-12 col-xs-12" style="visibility: hidden;">-</div>
@@ -85,7 +85,7 @@
     <!-- /#wrapper -->
 
     <?php include "stdScripts.html"; ?>
-    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
+    <script src="../bower_components/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
     <script src="../dist/root/scripts/JSRootCore.js?io&2d&onload=createmyGUI" type="text/javascript"></script>  
     <script src="../js/treeNavigation.js"></script>
     <script src="../js/results.js"></script>
