@@ -4,7 +4,9 @@
 function createmyGUI() {
     window.drawings = [];
     window.filename = QueryString.result;
-    $.getJSON( "../data/ResultsAnalysisReport.json", createGUI);
+    //TODO: change the salt to avoid caching
+    //TODO change also from global to relative path when needed
+    $.getJSON( "../data/ResultsAnalysisReport.json?opt=azer", createGUI);
 }
 
 // actually build the GUI after reading json 
@@ -24,25 +26,54 @@ function onFileOpen(file) {
     window.fileStructure = parseDirectory(file,file,"",buildFileStructure);
     var activeDir = QueryString.dir;
     var histoGrid = $("#histoGrid");
+    //TODO fix the layout to avoid holes:
+    //set a uniform height by hand
     if(activeDir != undefined) {
         file.ReadDirectory(activeDir,function(dir) {
-            var dirkeys = dir.fKeys;
+            dirkeys = dir.fKeys;
             for(var i=0;i<dirkeys.length;i++) {
-		//TODO: need another solution for TCanvas: it doesn't reproduce the full canvas, just the data part.
-		//dashboard demonstrates one solution with ajax + cgi to get a svg produced on the server
-	        if($.inArray( dirkeys[i].fClassName, [ "TH1F", "TCanvas" ]  )!== -1) { //TODO: extend the list to others. Try first.
+		//TODO we may keep an option to draw TCanvas using JSROOT in some cases
+	        if($.inArray( dirkeys[i].fClassName, [ "TH1F" ]  )!== -1) {
                     // prepare the html container
                       $('<div/>', {class:"col-lg-3 col-sm-4 col-xs-12"})
                          .append($('<div/>',{class:"panel panel-primary drawingpanel"})
                                    .append($('<div/>', {class:"panel-body drawing", id:"drawing_"+dirkeys[i].fName}))
                                 )
                          .appendTo(histoGrid);
+		      //TODO set the padding to 0px
                     // draw in it
                     file.ReadObject(activeDir+"/"+dirkeys[i].fName, function(obj) {
                         JSROOT.draw("drawing_"+obj.fName, obj, "");
                         window.drawings.push(obj);
                     });
-                }
+		} else if($.inArray( dirkeys[i].fClassName, [ "TCanvas" ]  )!== -1) { // this can be used to all objects not handled by JSROOT
+			//encodedfile = encodeURIComponent("/home/delaer/public_html/data/ZbblowMET_smallMll_RewFormformulaPol3NLO_PAS.root")
+			encodedfile = encodeURIComponent("/home/delaer/public_html/pages/"+window.filename)
+			encodedcanvas = encodeURIComponent(activeDir+"/"+dirkeys[i].fName)
+			console.log("http://localhost/cgi-bin/getCanvas.py?file="+encodedfile+"&canvas="+encodedcanvas)
+			$.ajax({
+				url:       "http://localhost/cgi-bin/getCanvas.py?file="+encodedfile+"&canvas="+encodedcanvas,
+				cache:     false,
+				dataType:  "text",
+				data:      { mode: 'info' },
+				success:   function(result) { 
+					// get the name
+                      			element = $('<div/>', {class:"col-lg-3 col-sm-4 col-xs-12"})
+                      			        .append($('<div/>',{class:"panel panel-primary drawingpanel"})
+                      			             .append($('<div/>', {class:"panel-body drawing"})
+							  .append(result)
+							    )
+                      			          );
+					var name = element.comments().html()
+					element.find("drawing").attr("id","drawing_"+name);
+                      			element.appendTo(histoGrid);
+					var svgElement = element.find("svg");
+					var ratio = svgElement.height()/svgElement.width(); 
+					svgElement.width(svgElement.parent().width()-10); //TODO instead of -10, subtract the parent padding (left+right)
+					svgElement.height(svgElement.width()*ratio);
+				}
+			});
+	       	}
             }
         });
     }
@@ -71,7 +102,7 @@ function parseDirectory(dir,file,path, callback) {
 // once the file has been parsed, build the HTML
 function buildFileStructure() {
 	window.fileStructure.sort(function(a,b){ return a.name>b.name; });
-	$("#fileTree").html($("<li/>").html($("<a/>").attr('href','#').html(window.filename)));
+	$("#fileTree").html($("<li/>").html($("<a/>").attr('href','#').html("ROOT file")));
 	generateHtmlTree($("#fileTree").find("li"),window.fileStructure);
 	$('#fileTree').treed();
 }
@@ -120,6 +151,7 @@ function redrawAll() {
 
 // register event handlers
 $(function(){
+	//TODO: that handler is only for JSROOT mode. Update for CGI-generated
      $('#histoGrid').on('dblclick',function(e) {
 	 // check that we actually clicked on a plot and get its name
 	 var hit = e.target.closest(".drawing");

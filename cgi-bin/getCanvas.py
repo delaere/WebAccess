@@ -16,4 +16,6 @@ if parameters.has_key("file") and parameters.has_key("canvas"):
     out = tempfile.NamedTemporaryFile(suffix=".svg")
     tcanvas.SaveAs(out.name)
     s = out.read()
+    key = canvas.split("/")[-1]
+    print "<!--"+key+"-->"
     print s
