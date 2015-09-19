@@ -3,22 +3,32 @@
 // called when ROOT is ready
 function createmyGUI() {
     window.filename = QueryString.result;
-    //TODO: change the salt to avoid caching
     //TODO change also from global to relative path when needed
     //TODO: one idea: both local and global names should be made available in the html in a php-generated snippet
-    $.getJSON( "../data/ResultsAnalysisReport.json?opt=azer", createGUI);
+    $.getJSON( "../data/ResultsAnalysisReport.json?salt="+makeid(), createGUI);
+}
+
+function makeid()
+{
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < 5; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
 }
 
 // actually build the GUI after reading json 
 function createGUI(data) {
     // fill in the combo box
     loadAvailableResults(data);
-    //TODO doesnt work anymore
     // set the filename: 1. from URL (above); 2. from the combo
     if(window.filename === undefined) {
         window.filename = $('#inputFile option:selected').text();
     }
     if(window.filename === "") return;
+    // open the ROOT file
     new JSROOT.TFile(window.filename, onFileOpen);
 }
 
@@ -146,7 +156,7 @@ function loadAvailableResults(data) {
 	var inputs = $("#inputFile");
 	for(var i=0;i<results.length;i++){
 		inputs.append($("<option/>").html(results[i][1]));
-		if(results[i]===window.filename) {
+		if(results[i][1]===window.filename) {
 			$('#inputFile')[0].selectedIndex = i;
 		}
 	}
@@ -154,15 +164,24 @@ function loadAvailableResults(data) {
 
 $(window).resize(resizeAll);
 function resizeAll() {
-	//TODO reisze only what is visible (not all)
-	var refwidth = $(".drawing").width();
-	var refheight = $(".drawing").height();
-	var elements = $(".drawing svg");
-	for (var i=0;i<elements.size();i++) {
-		var ratio = elements.eq(i).width()/elements.eq(i).height();
-		elements.eq(i).width(elements.eq(i).parent().width()-10);
-		elements.eq(i).height(elements.eq(i).width()/ratio);
-		elements.eq(i).parent().height(elements.eq(i).parent().width()/ratio);
+	if($(".drawing").is(":visible")) {
+		var refwidth = $(".drawing").width();
+		var refheight = $(".drawing").height();
+		var elements = $(".drawing svg");
+		for (var i=0;i<elements.size();i++) {
+			var ratio = elements.eq(i).width()/elements.eq(i).height();
+			elements.eq(i).width(elements.eq(i).parent().width()-10);
+			elements.eq(i).height(elements.eq(i).width()/ratio);
+			elements.eq(i).parent().height(elements.eq(i).parent().width()/ratio);
+		}
+	}
+	var modal = $("#modal_plot");
+	if(modal.is(":visible")){
+		var svgElement = $("#modal_plot >svg");
+		var ratio = svgElement.height()/svgElement.width(); 
+		var padding_tot = Number(svgElement.parent().css("padding-left").replace("px",""))+Number(svgElement.parent().css("padding-right").replace("px",""));
+		svgElement.width(svgElement.parent().width()-padding_tot);
+		svgElement.height(svgElement.width()*ratio);
 	}
 }
 

@@ -59,9 +59,6 @@
                         <div class="panel panel-primary">
 			    <div class="panel-heading" id="myModalLabel">
                             </div>
-<!--                            <div class="panel-body" style="padding-bottom: 75%; position: relative;">
-				<div id="modal_plot"></div>
--->
                             <div class="panel-body" id="modal_plot">
 			    </div>
 			    <div class="panel-footer">
@@ -73,25 +70,6 @@
                 </div>
             </div>
             <!-- /.container-fluid -->
-
-            <!-- Modal 
-            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-                        </div>
-                        <div class="modal-body" id="modal_plot">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-             /.modal -->
-
         </div>
         <!-- /#page-wrapper -->
 
