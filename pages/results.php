@@ -23,6 +23,7 @@
 
     <!-- Custom CSS specialization-->
     <link href="../dist/css/webAccess.css" rel="stylesheet">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css" rel="stylesheet">
 
 
 </head>
@@ -43,17 +44,24 @@
                     <div class="col-md-4 well ">
                         <ul id="fileTree"></ul>
                     </div>
-                    <div class="col-md-8">
-                      <form role="form">
+                    <form role="form">
+                      <div class="col-md-8">
                         <div class="form-group">
-                          <label for="sel1">Select result:</label>
                           <select class="form-control" id="inputFile">
                           </select>
                         </div>
-                      </form>
-                    </div>
+                      </div>
+                    </form>
+                    <form role="form">
+		      <div class="col-lg-4 col-md-4 col-sm-8 col-xs-8 clearfix">
+			<input type="checkbox" data-toggle="toggle" data-width="100%" data-on="Render canvases using JSROOT" data-off="Render canvases on the server">
+		      </div>
+		      <div class="col-lg-4 col-xs-4 clearfix">
+			<button type="button" class="btn btn-primary btn-block" id="SAMADhi">Open in SAMADhi</button>
+		      </div>
+                    </form>
+		      <div class="col-lg-12 col-xs-12" style="visibility: hidden;">-</div>
                 </div>
-<!-- TODO: add a toggle to active/disable CGI rendering, and add a link to the SAMADhi website -->
                 <div class="row" id="histoZoom" style="display: none;">
                    <div class="col-lg-12">
                         <div class="panel panel-primary">
@@ -77,6 +85,7 @@
     <!-- /#wrapper -->
 
     <?php include "stdScripts.html"; ?>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
     <script src="../dist/root/scripts/JSRootCore.js?io&2d&onload=createmyGUI" type="text/javascript"></script>  
     <script src="../js/treeNavigation.js"></script>
     <script src="../js/results.js"></script>

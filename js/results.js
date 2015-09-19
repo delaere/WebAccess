@@ -5,6 +5,7 @@ function createmyGUI() {
     window.filename = QueryString.result;
     //TODO change also from global to relative path when needed
     //TODO: one idea: both local and global names should be made available in the html in a php-generated snippet
+    // see discussion there: http://stackoverflow.com/questions/1240462/php-convert-file-system-path-to-url
     $.getJSON( "../data/ResultsAnalysisReport.json?salt="+makeid(), createGUI);
 }
 
@@ -212,6 +213,11 @@ $(function(){
      $('#inputFile').on('change',function(e){
 	 var newfilename = $("#inputFile option:selected").text();
 	 window.location=window.location.origin+window.location.pathname+"?result="+encodeURIComponent(newfilename);
+     });
+     $('#SAMADhi').click(function(){
+//TODO: the link has to be built from the active sample (info is in json)
+        var id = 1;
+	window.open("http://cp3.irmp.ucl.ac.be/~delaere/level2/SAMADhi/index.php?-table=result&-action=browse&-cursor=0&-skip=0&-limit=30&-mode=list&-recordid=result%3Fresult_id%3D"+id);
      });
 });
 
