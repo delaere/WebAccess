@@ -2,10 +2,10 @@
 
 // called when ROOT is ready
 function createmyGUI() {
-    window.drawings = [];
     window.filename = QueryString.result;
     //TODO: change the salt to avoid caching
     //TODO change also from global to relative path when needed
+    //TODO: one idea: both local and global names should be made available in the html in a php-generated snippet
     $.getJSON( "../data/ResultsAnalysisReport.json?opt=azer", createGUI);
 }
 
@@ -13,6 +13,7 @@ function createmyGUI() {
 function createGUI(data) {
     // fill in the combo box
     loadAvailableResults(data);
+    //TODO doesnt work anymore
     // set the filename: 1. from URL (above); 2. from the combo
     if(window.filename === undefined) {
         window.filename = $('#inputFile option:selected').text();
@@ -26,8 +27,7 @@ function onFileOpen(file) {
     window.fileStructure = parseDirectory(file,file,"",buildFileStructure);
     var activeDir = QueryString.dir;
     var histoGrid = $("#histoGrid");
-    //TODO fix the layout to avoid holes:
-    //set a uniform height by hand
+    window.elheight = -1;
     if(activeDir != undefined) {
         file.ReadDirectory(activeDir,function(dir) {
             dirkeys = dir.fKeys;
@@ -35,22 +35,30 @@ function onFileOpen(file) {
 		//TODO we may keep an option to draw TCanvas using JSROOT in some cases
 	        if($.inArray( dirkeys[i].fClassName, [ "TH1F" ]  )!== -1) {
                     // prepare the html container
-                      $('<div/>', {class:"col-lg-3 col-sm-4 col-xs-12"})
-                         .append($('<div/>',{class:"panel panel-primary drawingpanel"})
+			$('<div/>', {class:"col-lg-3 col-sm-4 col-xs-12"})
+                             .append($('<div/>',{class:"panel panel-primary drawingpanel"})
                                    .append($('<div/>', {class:"panel-body drawing", id:"drawing_"+dirkeys[i].fName}))
-                                )
-                         .appendTo(histoGrid);
-		      //TODO set the padding to 0px
+                                ).appendTo(histoGrid);
                     // draw in it
                     file.ReadObject(activeDir+"/"+dirkeys[i].fName, function(obj) {
                         JSROOT.draw("drawing_"+obj.fName, obj, "");
-                        window.drawings.push(obj);
+			var svgElement = $("#drawing_"+obj.fName+" svg");
+			var ratio = svgElement.height()/svgElement.width(); 
+			var padding_tot = Number(svgElement.parent().css("padding-left").replace("px",""))+Number(svgElement.parent().css("padding-right").replace("px",""));
+			svgElement.width(svgElement.parent().width()-padding_tot);
+			svgElement.height(svgElement.width()*ratio);
+			if(window.elheight>0 && svgElement.height()>window.elheight) {
+				svgElement.height(window.elheight);
+				svgElement.width(svgElement.height()/ratio);
+			} else {
+				window.elheight = svgElement.height();
+				$(".drawing svg").height(window.elheight);
+			}
                     });
 		} else if($.inArray( dirkeys[i].fClassName, [ "TCanvas" ]  )!== -1) { // this can be used to all objects not handled by JSROOT
 			//encodedfile = encodeURIComponent("/home/delaer/public_html/data/ZbblowMET_smallMll_RewFormformulaPol3NLO_PAS.root")
 			encodedfile = encodeURIComponent("/home/delaer/public_html/pages/"+window.filename)
 			encodedcanvas = encodeURIComponent(activeDir+"/"+dirkeys[i].fName)
-			console.log("http://localhost/cgi-bin/getCanvas.py?file="+encodedfile+"&canvas="+encodedcanvas)
 			$.ajax({
 				url:       "http://localhost/cgi-bin/getCanvas.py?file="+encodedfile+"&canvas="+encodedcanvas,
 				cache:     false,
@@ -58,19 +66,27 @@ function onFileOpen(file) {
 				data:      { mode: 'info' },
 				success:   function(result) { 
 					// get the name
-                      			element = $('<div/>', {class:"col-lg-3 col-sm-4 col-xs-12"})
+                      			var element = $('<div/>', {class:"col-lg-3 col-sm-4 col-xs-12"})
                       			        .append($('<div/>',{class:"panel panel-primary drawingpanel"})
                       			             .append($('<div/>', {class:"panel-body drawing"})
 							  .append(result)
 							    )
                       			          );
-					var name = element.comments().html()
-					element.find("drawing").attr("id","drawing_"+name);
-                      			element.appendTo(histoGrid);
+					var name = element.find(".drawing").comments().html()
+					element.find(".drawing").attr("id","drawing_"+name);
+					element.appendTo(histoGrid);
 					var svgElement = element.find("svg");
 					var ratio = svgElement.height()/svgElement.width(); 
-					svgElement.width(svgElement.parent().width()-10); //TODO instead of -10, subtract the parent padding (left+right)
+					var padding_tot = Number(svgElement.parent().css("padding-left").replace("px",""))+Number(svgElement.parent().css("padding-right").replace("px",""));
+					svgElement.width(svgElement.parent().width()-padding_tot);
 					svgElement.height(svgElement.width()*ratio);
+					if(window.elheight>0 && svgElement.height()>window.elheight) {
+						svgElement.height(window.elheight);
+						svgElement.width(svgElement.height()/ratio);
+					} else {
+						window.elheight = svgElement.height();
+						$(".drawing svg").height(window.elheight);
+					}
 				}
 			});
 	       	}
@@ -136,45 +152,35 @@ function loadAvailableResults(data) {
 	}
 }
 
-//TODO: might not need to redraw: can directly act on svg dimensions
-// redraw on resize
-$(window).resize(redrawAll);
-function redrawAll() {
-  for(var i=0;i<window.drawings.length;i++) {
-      var objtoDraw = window.drawings[i];
-      console.log(objtoDraw.fName);
-      $("#drawing_"+objtoDraw.fName).html("");
-      JSROOT.redraw("drawing_"+objtoDraw.fName, objtoDraw, "");
-  }
-  drawModal();
+$(window).resize(resizeAll);
+function resizeAll() {
+	//TODO reisze only what is visible (not all)
+	var refwidth = $(".drawing").width();
+	var refheight = $(".drawing").height();
+	var elements = $(".drawing svg");
+	for (var i=0;i<elements.size();i++) {
+		var ratio = elements.eq(i).width()/elements.eq(i).height();
+		elements.eq(i).width(elements.eq(i).parent().width()-10);
+		elements.eq(i).height(elements.eq(i).width()/ratio);
+		elements.eq(i).parent().height(elements.eq(i).parent().width()/ratio);
+	}
 }
 
 // register event handlers
 $(function(){
-	//TODO: that handler is only for JSROOT mode. Update for CGI-generated
      $('#histoGrid').on('dblclick',function(e) {
 	 // check that we actually clicked on a plot and get its name
 	 var hit = e.target.closest(".drawing");
 	 if(hit==null) return;
 	 var id = e.target.closest(".drawing").id;
 	 var name = id.substring(8,id.length);
-	 // find the object
-	 var obj=null;
-	 for(var i=0;i<window.drawings.length;i++) {
-		 if(window.drawings[i].fName==name) {
-			 obj = window.drawings[i];
-			 break;
-		 }
-	 }
-	 if(obj==null) return;
 	 // prepare the modal window
 	 // title
-	 $('#myModalLabel').html(obj.fTitle);
-	 $('#myModalLabel').attr("drawing",i);
+	 $('#myModalLabel').html(name);
+	 $('#myModalLabel').attr("drawing",id);
 	 // display
 	 $("#histoZoom").toggle(400);
 	 $("#histoGrid").toggle(400);
-         //JSROOT.redraw("modal_plot", obj, "");
 	 // wait for the modal to appear before drawing
 	 window.setTimeout(drawModal,500);
      });
@@ -182,7 +188,7 @@ $(function(){
 	 // display
 	 $("#histoZoom").toggle(400);
 	 $("#histoGrid").toggle(400);
-	 window.setTimeout(redrawAll,500);
+	 window.setTimeout(resizeAll,500);
      });
      $('#inputFile').on('change',function(e){
 	 var newfilename = $("#inputFile option:selected").text();
@@ -192,11 +198,15 @@ $(function(){
 
 // draw the modal window
 function drawModal() {
-	// get obj
-	var objModal = window.drawings[($('#myModalLabel').attr("drawing"))];
-	// plot
+	// drawback of this method: we cannot interact with the zoomed plot
+	var id = $('#myModalLabel').attr("drawing");
 	$("#modal_plot").html("");
-	JSROOT.redraw("modal_plot", objModal, "");
+	$("#"+id+" >svg").clone().appendTo($("#modal_plot"));
+	var svgElement = $("#modal_plot >svg");
+	var ratio = svgElement.height()/svgElement.width(); 
+	var padding_tot = Number(svgElement.parent().css("padding-left").replace("px",""))+Number(svgElement.parent().css("padding-right").replace("px",""));
+	svgElement.width(svgElement.parent().width()-padding_tot);
+	svgElement.height(svgElement.width()*ratio);
 }
 
 // decode the URL

@@ -53,14 +53,17 @@
                       </form>
                     </div>
                 </div>
+<!-- TODO: add a toggle to active/disable CGI rendering, and add a link to the SAMADhi website -->
                 <div class="row" id="histoZoom" style="display: none;">
                    <div class="col-lg-12">
                         <div class="panel panel-primary">
 			    <div class="panel-heading" id="myModalLabel">
                             </div>
-                            <div class="panel-body" style="padding-bottom: 75%; position: relative;">
+<!--                            <div class="panel-body" style="padding-bottom: 75%; position: relative;">
 				<div id="modal_plot"></div>
-                            </div>
+-->
+                            <div class="panel-body" id="modal_plot">
+			    </div>
 			    <div class="panel-footer">
                             </div>
                         </div>
