@@ -62,32 +62,23 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-xs-12">
-                        <div class="panel panel-primary">
+		</div>
+            	<div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-primary" id="MissingDirSamples">
                             <div class="panel-heading">
-                                Sample Types
+                                Results with missing path <span class="badge" id="numberOfMissingDirSamples"></span>
                             </div>
-                            <div class="panel-body" id="typePlotContainer">
+                            <!-- .panel-heading -->
+                            <div class="panel-body">
+                                <div class="panel-group" id="accordionA">
+		    		<p>The following results are pointing to non-existant locations on the server.</p>
+                                </div>
                             </div>
+                            <!-- .panel-body -->
                         </div>
-                    </div>
-            </div><div class="row">
-                <div class="col-lg-12">
-                    <div class="panel panel-primary" id="MissingDirSamples">
-                        <div class="panel-heading">
-                            Samples with missing path <span class="badge" id="numberOfMissingDirSamples"></span>
-                        </div>
-                        <!-- .panel-heading -->
-                        <div class="panel-body">
-                            <div class="panel-group" id="accordionA">
-				<p>The following samples are pointing to non-existant locations on the server.</p>
-                            </div>
-                        </div>
-                        <!-- .panel-body -->
-                    </div>
-                    <!-- /.panel -->
-                </div>
-                <!-- /.col-lg-12 -->
+                        <!-- /.panel -->
+                    </div> <!-- /.col-lg-12 -->
 		    <div class="col-lg-12 col-xs-12">
                         <div class="panel panel-primary" id="DbProblems">
                             <div class="panel-heading">
@@ -95,44 +86,8 @@
                             </div>
                             <div class="panel-body">
                                 <div class="panel-group" id="accordionB">
-			            <p>The following samples have inconsitencies in their relation to other entries.</p>
+			            <p>The following results have inconsitencies in their relation to other entries.</p>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-xs-12">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                Evolution of the number of events in samples
-                            </div>
-                            <div class="panel-body" id="sampleNeventsTimeprofContainer">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-xs-12">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                Number of events in samples
-                            </div>
-                            <div class="panel-body" id="sampleNeventsContainer">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-xs-12">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                Evolution of the number of events processed
-                            </div>
-                            <div class="panel-body" id="sampleNeventsProcessedTimeprofContainer">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-xs-12">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                Number of events processed
-                            </div>
-                            <div class="panel-body" id="sampleNeventsProcessedContainer">
                             </div>
                         </div>
                     </div>

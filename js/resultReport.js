@@ -2,9 +2,9 @@ $(function(){
     //////////////////////////////////////////////////
     // read the json file to fill in the page content
     //////////////////////////////////////////////////
-    $.getJSON( "../data/analysisReport.json", function( data  ) {
+    $.getJSON( "../data/ResultsAnalysisReport.json", function( data  ) {
         /////////////////////////////////////////////////
-        // samples with missing directory
+        // result with missing directory
         /////////////////////////////////////////////////
         var missingDirSamples = data["MissingDirSamples"];
         var missingDirSamples_pg = $("#MissingDirSamples").find(".panel-group");
@@ -25,6 +25,7 @@ $(function(){
                         )
                     )
                 ).append(
+	// TODO: will have to be adapted (see details of the export, no case for now)
                     $("<div />").addClass("panel-collapse collapse").attr({id: "collapseA"+i}).html(
                         $("<div />").addClass("panel-body").html(
                             $("<div />").addClass("table-responsive").html(
@@ -74,6 +75,7 @@ $(function(){
                         )
                     )
                 ).append(
+	// TODO: will have to be adapted (see details of the export, no case for now)
                     $("<div />").addClass("panel-collapse collapse").attr({id: "collapseB"+i}).html(
                         $("<div />").addClass("panel-body").html(
                             $("<div />").addClass("table-responsive").html(
@@ -99,164 +101,12 @@ $(function(){
         /////////////////////////////////////////////////
         // Plots with db statistics
         /////////////////////////////////////////////////
-        var statistics = data["SampleStatistics"];
-        // Number of events in samples
-        var sampleNevents = statistics["sampleNevents"];
-        $('#sampleNeventsContainer').highcharts({
-            series: [{
-                name: "Samples",
-                data: sampleNevents
-            }],
-            chart: {
-                type: 'column'
-            },
-            title: {
-                text: ''
-            },
-            legend: {
-                enabled: false
-            },
-            xAxis: { 
-                title: {
-                    text:'Number of Events',
-                    align: 'high'
-                }
-            },
-            yAxis: { 
-                type: 'logarithmic' ,
-                title: {
-                    text:'Number of Samples',
-                    align: 'high'
-                }
-            },
-            plotOptions: {
-                column: {
-                    pointPadding: 0,
-                    borderWidth: 0,
-                    groupPadding: 0,
-                    shadow: false
-                }
-            }
-        });
-        // Evolution of the number of events in samples
-        var sampleNeventsTimeprof = statistics["sampleNeventsTimeprof"];
-        $('#sampleNeventsTimeprofContainer').highcharts({
-            chart: {
-                type: 'spline'
-            },
-            title: {
-                text: ''
-            },
-            legend: {
-                enabled: false
-            },
-            xAxis: { 
-                type: 'datetime',
-                title: {
-                    text:'Date',
-                    align: 'high'
-                }
-            },
-            yAxis: { 
-                type: 'logarithmic' ,
-                title: {
-                    text:'Number of Events',
-                    align: 'high'
-                }
-            },
-            plotOptions: {
-                spline: {
-                    marker: {
-                        enabled: true
-                    }
-                }
-            },
-            series: [{
-                name: "SAMADhi",
-                data: sampleNeventsTimeprof
-            }]
-        });
-        // Number of events processed
-        var sampleNeventsProcessed = statistics["sampleNeventsProcessed"];
-        $('#sampleNeventsProcessedContainer').highcharts({
-            series: [{
-                name: "SAMADhi",
-                data: sampleNeventsProcessed
-            }],
-            chart: {
-                type: 'column'
-            },
-            title: {
-                text: ''
-            },
-            legend: {
-                enabled: false
-            },
-            xAxis: { 
-                title: {
-                    text:'Number of Events',
-                    align: 'high'
-                }
-            },
-            yAxis: { 
-                type: 'logarithmic' ,
-                title: {
-                    text:'Number of Samples',
-                    align: 'high'
-                }
-            },
-            plotOptions: {
-                column: {
-                    pointPadding: 0,
-                    borderWidth: 0,
-                    groupPadding: 0,
-                    shadow: false
-                }
-            }
-        });
-        // Evolution of the number of events processed
-        var sampleNeventsProcessedTimeprof = statistics["sampleNeventsProcessedTimeprof"];
-        $('#sampleNeventsProcessedTimeprofContainer').highcharts({
-            chart: {
-                type: 'spline'
-            },
-            title: {
-                text: ''
-            },
-            legend: {
-                enabled: false
-            },
-            xAxis: { 
-                type: 'datetime',
-                title: {
-                    text:'Date',
-                    align: 'high'
-                }
-            },
-            yAxis: { 
-                type: 'logarithmic' ,
-                title: {
-                    text:'Number of Events',
-                    align: 'high'
-                }
-            },
-            plotOptions: {
-                spline: {
-                    marker: {
-                        enabled: true
-                    }
-                }
-            },
-            series: [{
-                name: "SAMADhi",
-                data: sampleNeventsProcessedTimeprof
-            }]
-        });
+        var statistics = data["ResultsStatistics"];
         // Time profile
-        var samplesTimeprof = statistics["samplesTimeprof"];
+        var resultsTimeprof = statistics["resultsTimeprof"];
         $('#timeProfileContainer').highcharts({
             chart: {
-                type: 'spline'
+                type: 'line'
             },
             title: {
                 text: ''
@@ -272,9 +122,8 @@ $(function(){
                 }
             },
             yAxis: { 
-                type: 'logarithmic' ,
                 title: {
-                    text:'Number of Samples',
+                    text:'Number of Results',
                     align: 'high'
                 }
             },
@@ -287,47 +136,11 @@ $(function(){
             },
             series: [{
                 name: "SAMADhi",
-                data: samplesTimeprof
+                data: resultsTimeprof
             }]
         });
-        // Sample Types
-        var sampleTypes = statistics["sampleTypes"];
-            $('#typePlotContainer').highcharts({
-                chart: {
-                    type: 'pie',
-                    options3d: {
-                        enabled: true,
-                        alpha: 45,
-                        beta: 0
-                    }
-                },
-                title: {
-                    text: ''
-                },
-                tooltip: {
-                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                },
-                plotOptions: {
-                    pie: {
-                        size: '85%',
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        depth: 35,
-                        dataLabels: {
-                            enabled: true,
-                            format: '{point.name}'
-                        }
-                    }
-                },
-                series: [{
-                    type: 'pie',
-                    name: 'Samples share',
-            data: sampleTypes
-                }]
-            });
-        $("#typePlotContainer").siblings().filter(".panel-heading").html("Samples type")
-        // Samples Author
-        var sampleAuthors = statistics["sampleAuthors"];
+        // Author
+        var resultsAuthors = statistics["resultsAuthors"];
         $('#authorsPlotContainer').highcharts({
             chart: {
                 type: 'pie',
@@ -357,11 +170,11 @@ $(function(){
             },
             series: [{
                 type: 'pie',
-                name: 'Samples share',
-                data: sampleAuthors
+                name: 'Result share',
+                data: resultsAuthors
             }]
         });
-        $("#authorsPlotContainer").siblings().filter(".panel-heading").html("Samples author")
+        $("#authorsPlotContainer").siblings().filter(".panel-heading").html("Results author")
     } );
     // radial gradiant
     Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, function (color) {
