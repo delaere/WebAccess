@@ -20,26 +20,17 @@ $(function(){
                     $("<div />").addClass("panel-heading").html(
                         $("<h4 />").addClass("panel-title").html(
                             $("<a />").attr({"data-toggle":"collapse", "data-parent":"#accordionA", "href":"#collapseA"+i}).html(
-                                missingDirSamples[i]["name"]+" (created on "+missingDirSamples[i]["creation_time"]+" by "+missingDirSamples[i]["author"]+")"
+                                "Result #"+missingDirSamples[i]["result_id"]+" (created on "+missingDirSamples[i]["creation_time"]+" by "+missingDirSamples[i]["author"]+")"
                             )
                         )
                     )
                 ).append(
-	// TODO: will have to be adapted (see details of the export, no case for now)
                     $("<div />").addClass("panel-collapse collapse").attr({id: "collapseA"+i}).html(
                         $("<div />").addClass("panel-body").html(
                             $("<div />").addClass("table-responsive").html(
                                 $("<div />").addClass("table table-hover").html(
                                     $("<tbody />").html($("<tr />").html("<td>Path</td><td>"+missingDirSamples[i]["path"]+"</td>")).append(
-                                        $("<tr />").html("<td>Type</td><td>"+missingDirSamples[i]["sampletype"]+"</td>")).append(
-                                        $("<tr />").html("<td>number of processed events</td><td>"+missingDirSamples[i]["nevents_processed"]+"</td>")).append(
-                                        $("<tr />").html("<td>number of events</td><td>"+missingDirSamples[i]["nevents"]+"</td>")).append(
-                                        $("<tr />").html("<td>(Effective) luminosity</td><td>"+missingDirSamples[i]["luminosity"]+"</td>")).append(
-                                        $("<tr />").html("<td>Normalization</td><td>"+missingDirSamples[i]["normalization"]+"</td>")).append(
-                                        $("<tr />").html("<td>Code version</td><td>"+missingDirSamples[i]["code_version"]+"</td>")).append(
-                                        $("<tr />").html("<td>Comment</td><td>"+missingDirSamples[i]["user_comment"]+"</td>")).append(
-                                        $("<tr />").html("<td>Source dataset</td><td>"+missingDirSamples[i]["source_dataset_id"]+"</td>")).append(
-                                        $("<tr />").html("<td>Source sample</td><td>"+missingDirSamples[i]["source_sample_id"]+"</td>")
+                                        $("<tr />").html("<td>Description</td><td>"+missingDirSamples[i]["description"]+"</td>")
                                     )
                                 )
                             )
@@ -66,7 +57,7 @@ $(function(){
                     $("<div />").addClass("panel-heading").html(
                         $("<h4 />").addClass("panel-title").html(
                             $("<a />").attr({"data-toggle":"collapse", "data-parent":"#accordionB", "href":"#collapseB"+i}).html(
-                                dbProblems[i][0]["name"]+" (created on "+dbProblems[i][0]["creation_time"]+" by "+dbProblems[i][0]["author"]+")  "
+                                "Result #"+dbProblems[i][0]["result_id"]+" (created on "+dbProblems[i][0]["creation_time"]+" by "+dbProblems[i][0]["author"]+")  "
                             )
                         ).append(
                             $("<span />").addClass("label label-danger").html( 
@@ -75,22 +66,13 @@ $(function(){
                         )
                     )
                 ).append(
-	// TODO: will have to be adapted (see details of the export, no case for now)
                     $("<div />").addClass("panel-collapse collapse").attr({id: "collapseB"+i}).html(
                         $("<div />").addClass("panel-body").html(
                             $("<div />").addClass("table-responsive").html(
                                 $("<div />").addClass("table table-hover").html(
                                     $("<tbody />").html($("<tr />").html("<td>Path</td><td>"+dbProblems[i][0]["path"]+"</td>")).append(
-                                        $("<tr />").html("<td>Type</td><td>"+dbProblems[i][0]["sampletype"]+"</td>")).append(
-                                        $("<tr />").html("<td>number of processed events</td><td>"+dbProblems[i][0]["nevents_processed"]+"</td>")).append(
-                                        $("<tr />").html("<td>number of events</td><td>"+dbProblems[i][0]["nevents"]+"</td>")).append(
-                                        $("<tr />").html("<td>(Effective) luminosity</td><td>"+dbProblems[i][0]["luminosity"]+"</td>")).append(
-                                        $("<tr />").html("<td>Normalization</td><td>"+dbProblems[i][0]["normalization"]+"</td>")).append(
-                                        $("<tr />").html("<td>Code version</td><td>"+dbProblems[i][0]["code_version"]+"</td>")).append(
-                                        $("<tr />").html("<td>Comment</td><td>"+dbProblems[i][0]["user_comment"]+"</td>")).append(
-                                        $("<tr />").html("<td>Source dataset</td><td>"+dbProblems[i][0]["source_dataset_id"]+"</td>")).append(
-                                        $("<tr />").html("<td>Source sample</td><td>"+dbProblems[i][0]["source_sample_id"]+"</td>")
-                                    )
+                                        $("<tr />").html("<td>Description</td><td>"+dbProblems[i][0]["description"]+"</td>")
+				     )
                                 )
                             )
                         )
