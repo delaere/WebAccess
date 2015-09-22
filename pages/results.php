@@ -74,6 +74,17 @@
                         </div>
                     </div>
                 </div>
+		<!-- Modal -->    
+		<div class="modal fade" data-keyboard="true" data-show="true" data-backdrop="static" id="pleasewait" role="dialog">
+		  <div class="modal-dialog modal-sm">
+		    <div class="modal-content">
+		      <div class="modal-body">
+		              <h2 style="margin: 0 auto; white-space: pre;"><i class="fa fa-spinner fa-spin fa-2x" style="vertical-align: middle;"></i>  Please wait...</h2>
+		      </div>
+		    </div>
+		  </div>      
+		</div>            
+		<!-- Main grid -->
                 <div class="row" id="histoGrid">
                 </div>
             </div>

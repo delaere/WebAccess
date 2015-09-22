@@ -1,5 +1,8 @@
-// callback function called to populate the page from the ROOT file
+//TODO add preemptive progress bar
+//TODO revert to ROOT.draw for popup
+//TODO investigate the use of a single call to the backend (should be faster but less flexible)
 
+// callback function called to populate the page from the ROOT file
 // called when ROOT is ready
 function createmyGUI() {
     window.filename = QueryString.result;
@@ -48,6 +51,8 @@ function onFileOpen(file) {
     }
     if(activeDir != undefined) {
         file.ReadDirectory(activeDir,function(dir) {
+	    //$("#pleasewait").modal(); //TODO show modal
+	    //$("#pleasewait").modal("hide"); //TODO hide modal -> has to be done when all is drawn, which requires some work (multiple callbacks)
             dirkeys = dir.fKeys;
             for(var i=0;i<dirkeys.length;i++) {
 	        if($.inArray( dirkeys[i].fClassName, renderLocally)!== -1) {
