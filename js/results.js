@@ -1,4 +1,3 @@
-//TODO add preemptive progress bar
 //TODO revert to ROOT.draw for popup
 //TODO investigate the use of a single call to the backend (should be faster but less flexible)
 
@@ -7,9 +6,6 @@
 function createmyGUI() {
     window.filename = QueryString.result;
     if (QueryString.render==="true") $("#renderLocal").bootstrapToggle('on');
-    //TODO change also from global to relative path when needed
-    //TODO: one idea: both local and global names should be made available in the html in a php-generated snippet
-    // see discussion there: http://stackoverflow.com/questions/1240462/php-convert-file-system-path-to-url
     $.getJSON( "../data/ResultsAnalysisReport.json?salt="+makeid(), createGUI);
 }
 
@@ -44,40 +40,39 @@ function onFileOpen(file) {
     window.fileStructure = parseDirectory(file,file,"",buildFileStructure);
     var activeDir = QueryString.dir;
     var histoGrid = $("#histoGrid");
-    window.elheight = -1;
     var renderLocally = [ "TH1F"  ];
     if($("#renderLocal").is(':checked')) {
 	    renderLocally.push("TCanvas");
     }
+    window.activeDownloads = 1000; // keep track of the callbacks - start with big number, subtract it at the end of the loop
     if(activeDir != undefined) {
         file.ReadDirectory(activeDir,function(dir) {
-	    //$("#pleasewait").modal(); //TODO show modal
-	    //$("#pleasewait").modal("hide"); //TODO hide modal -> has to be done when all is drawn, which requires some work (multiple callbacks)
+	    $("#pleasewait").modal(); 
             dirkeys = dir.fKeys;
             for(var i=0;i<dirkeys.length;i++) {
 	        if($.inArray( dirkeys[i].fClassName, renderLocally)!== -1) {
+		    window.activeDownloads++;
                     // prepare the html container
-			$('<div/>', {class:"col-lg-3 col-sm-4 col-xs-12"})
-                             .append($('<div/>',{class:"panel panel-primary drawingpanel"})
-                                   .append($('<div/>', {class:"panel-body drawing", id:"drawing_"+dirkeys[i].fName}))
-                                ).appendTo(histoGrid);
+		    $('<div/>', {class:"col-lg-3 col-sm-4 col-xs-12"})
+			.append($('<div/>',{class:"thumbnail well drawing", id:"drawing_"+dirkeys[i].fName}))
+				.appendTo(histoGrid);
+		    var element = $("#drawing_"+dirkeys[i].fName);
+		    element.height(element.width()*0.75);
                     // draw in it
                     file.ReadObject(activeDir+"/"+dirkeys[i].fName, function(obj) {
-                        JSROOT.draw("drawing_"+obj.fName, obj, "");
+			try {
+                        	JSROOT.draw("drawing_"+obj.fName, obj, "");
+			} catch(err) { } // ignore
 			var svgElement = $("#drawing_"+obj.fName+" svg");
 			var ratio = svgElement.height()/svgElement.width(); 
 			var padding_tot = Number(svgElement.parent().css("padding-left").replace("px",""))+Number(svgElement.parent().css("padding-right").replace("px",""));
 			svgElement.width(svgElement.parent().width()-padding_tot);
 			svgElement.height(svgElement.width()*ratio);
-			if(window.elheight>0 && svgElement.height()>window.elheight) {
-				svgElement.height(window.elheight);
-				svgElement.width(svgElement.height()/ratio);
-			} else {
-				window.elheight = svgElement.height();
-				$(".drawing svg").height(window.elheight);
-			}
+			window.activeDownloads--;
+	    		if(window.activeDownloads==0) $("#pleasewait").modal("hide"); // if last callback, remove the modal
                     });
 		} else if($.inArray( dirkeys[i].fClassName, [ "TCanvas" ]  )!== -1) { // this can be used to all objects not handled by JSROOT
+		        window.activeDownloads++;
 			encodedfile = encodeURIComponent("/home/delaer/public_html/pages/"+window.filename)
 			encodedcanvas = encodeURIComponent(activeDir+"/"+dirkeys[i].fName)
 			$.ajax({
@@ -86,13 +81,9 @@ function onFileOpen(file) {
 				dataType:  "text",
 				data:      { mode: 'info' },
 				success:   function(result) { 
-					// get the name
-                      			var element = $('<div/>', {class:"col-lg-3 col-sm-4 col-xs-12"})
-                      			        .append($('<div/>',{class:"panel panel-primary drawingpanel"})
-                      			             .append($('<div/>', {class:"panel-body drawing"})
-							  .append(result)
-							    )
-                      			          );
+					var element = $('<div/>', {class:"col-lg-3 col-sm-4 col-xs-12"})
+						.append($('<div/>',{class:"thumbnail well drawing"})
+							.append(result));
 					var name = element.find(".drawing").comments().html()
 					element.find(".drawing").attr("id","drawing_"+name);
 					element.appendTo(histoGrid);
@@ -101,17 +92,14 @@ function onFileOpen(file) {
 					var padding_tot = Number(svgElement.parent().css("padding-left").replace("px",""))+Number(svgElement.parent().css("padding-right").replace("px",""));
 					svgElement.width(svgElement.parent().width()-padding_tot);
 					svgElement.height(svgElement.width()*ratio);
-					if(window.elheight>0 && svgElement.height()>window.elheight) {
-						svgElement.height(window.elheight);
-						svgElement.width(svgElement.height()/ratio);
-					} else {
-						window.elheight = svgElement.height();
-						$(".drawing svg").height(window.elheight);
-					}
+				window.activeDownloads--;
+	    			if(window.activeDownloads==0) $("#pleasewait").modal("hide"); // if last callback, remove the modal
 				}
 			});
 	       	}
             }
+	    window.activeDownloads -= 1000; // done with the loop. From now on, this contains the #active callbacks.
+	    if(window.activeDownloads==0) $("#pleasewait").modal("hide"); // if no more callback, remove the modal
         });
     }
 }
