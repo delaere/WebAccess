@@ -20,6 +20,7 @@
     <title>Nemrod's Dashboard</title>
 
     <?php include "stdHeaders.html"; ?>
+    <link href="../dist/css/webAccess.css" rel="stylesheet">
 
 </head>
 
@@ -33,38 +34,128 @@
         <div id="page-wrapper">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-8">
 			<h1 class="page-header">Dashboard</h1>
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+			<canvas id="clock" class="CoolClock:fancy:50"></canvas>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
                 <!-- /.row -->
 <!-- TODO things we can display:
-colored wells with #datasets #samples #results
-big red/green light with db status (online/offline)
 some grid stats (#running jobs, etc.) -> see with JdF
 -->
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-th-list fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">26</div>
+                                    <div>Datasets</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-file-text-o fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">12</div>
+                                    <div>Samples</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-yellow">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-bar-chart-o fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">124</div>
+                                    <div>Results</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-red">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-puzzle-piece fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">13</div>
+                                    <div>Analyses</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
                 <div class="row">
-                    <div class="col-lg-6">
-			<canvas id="clock" class="CoolClock:fancy:150"></canvas>
-                    </div>
                     <div class="col-lg-4">
                         <div class="panel panel-primary">
-                           <div class="panel-heading">First plot</div>
-                           <div class="panel-body" id="plot1"></div>
+			   <div class="panel-heading">Servers status<span class="pull-right"><button type="button" class="btn btn-outline btn-primary btn-xs"><i class="fa fa-refresh"></i>
+                            </button></span>
+			</div>
+                           <div class="panel-body" id="">
+				<div class="alert alert-success"><h3>ingrid-ui1<span class="pull-right"><i class="fa fa-2x fa-check-circle text-success"></i></span></h3></div>
+				<div class="alert alert-success"><h3>ingrid-ui2<span class="pull-right"><i class="fa fa-2x fa-check-circle text-success"></i></span></h3></div>
+				<div class="alert alert-success"><h3>GitHub<span class="pull-right"><i class="fa fa-2x fa-check-circle text-success"></i></span></h3></div>
+				<div class="alert alert-warning"><h3>SAMADhi<span class="pull-right"><i class="fa fa-2x fa-refresh fa-spin text-warning"></i></span></h3></div>
+				<div class="alert alert-danger"> <h3>DAS server<span class="pull-right"><i class="fa fa-2x fa-times-circle text-danger"></i></span></h3></div>
+			   </div>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-8">
                         <div class="panel panel-primary">
-		           <div class="panel-heading">Second Plot</div>
-		           <div class="panel-body" id="plot2">
-		            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="panel panel-primary">
-		           <div class="panel-heading">Third Plot</div>
-		           <div class="panel-body" id="plot3">
+		           <div class="panel-heading">Cluster status</div>
+		           <div class="panel-body" id="ingridStatus">
+				To be discussed with JdF.
 		            </div>
                         </div>
                     </div>
