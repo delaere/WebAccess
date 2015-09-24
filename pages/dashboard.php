@@ -55,12 +55,12 @@ some grid stats (#running jobs, etc.) -> see with JdF
                                     <i class="fa fa-th-list fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">26</div>
+                                    <div class="huge" id="nDatasets">#</div>
                                     <div>Datasets</div>
                                 </div>
                             </div>
                         </div>
-                        <a href="#">
+                        <a href="datasets.php">
                             <div class="panel-footer">
                                 <span class="pull-left">View Details</span>
                                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -77,12 +77,12 @@ some grid stats (#running jobs, etc.) -> see with JdF
                                     <i class="fa fa-file-text-o fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">12</div>
+                                    <div class="huge" id="nSamples">#</div>
                                     <div>Samples</div>
                                 </div>
                             </div>
                         </div>
-                        <a href="#">
+                        <a href="samplesReport.php">
                             <div class="panel-footer">
                                 <span class="pull-left">View Details</span>
                                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -99,12 +99,12 @@ some grid stats (#running jobs, etc.) -> see with JdF
                                     <i class="fa fa-bar-chart-o fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">124</div>
+                                    <div class="huge" id="nResults">#</div>
                                     <div>Results</div>
                                 </div>
                             </div>
                         </div>
-                        <a href="#">
+                        <a href="resultsReport.php">
                             <div class="panel-footer">
                                 <span class="pull-left">View Details</span>
                                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -121,7 +121,7 @@ some grid stats (#running jobs, etc.) -> see with JdF
                                     <i class="fa fa-puzzle-piece fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">13</div>
+                                    <div class="huge" id="nAnalyses">#</div>
                                     <div>Analyses</div>
                                 </div>
                             </div>
@@ -139,15 +139,16 @@ some grid stats (#running jobs, etc.) -> see with JdF
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="panel panel-primary">
-			   <div class="panel-heading">Servers status<span class="pull-right"><button type="button" class="btn btn-outline btn-primary btn-xs"><i class="fa fa-refresh"></i>
+			   <div class="panel-heading">Servers status
+				<span class="pull-right"><button type="button" class="btn btn-outline btn-primary btn-xs" id="ping"><i class="fa fa-refresh"></i>
                             </button></span>
 			</div>
-                           <div class="panel-body" id="">
-				<div class="alert alert-success"><h3>ingrid-ui1<span class="pull-right"><i class="fa fa-2x fa-check-circle text-success"></i></span></h3></div>
-				<div class="alert alert-success"><h3>ingrid-ui2<span class="pull-right"><i class="fa fa-2x fa-check-circle text-success"></i></span></h3></div>
-				<div class="alert alert-success"><h3>GitHub<span class="pull-right"><i class="fa fa-2x fa-check-circle text-success"></i></span></h3></div>
-				<div class="alert alert-warning"><h3>SAMADhi<span class="pull-right"><i class="fa fa-2x fa-refresh fa-spin text-warning"></i></span></h3></div>
-				<div class="alert alert-danger"> <h3>DAS server<span class="pull-right"><i class="fa fa-2x fa-times-circle text-danger"></i></span></h3></div>
+                           <div class="panel-body" id="servers">
+				<div id="ui1" class="alert alert-info"><h3>ingrid-ui1<span class="pull-right"><i class="fa fa-2x fa-exclamation-circle"></i></span></h3></div>
+				<div id="ui2" class="alert alert-info"><h3>ingrid-ui2<span class="pull-right"><i class="fa fa-2x fa-exclamation-circle"></i></span></h3></div>
+				<div id="gh"  class="alert alert-info"><h3>GitHub<span class="pull-right"><i class="fa fa-2x fa-exclamation-circle"></i></span></h3></div>
+				<div id="db"  class="alert alert-info"><h3>SAMADhi<span class="pull-right"><i class="fa fa-2x fa-exclamation-circle"></i></span></h3></div>
+				<div id="das" class="alert alert-info"> <h3>DAS server<span class="pull-right"><i class="fa fa-2x fa-exclamation-circle"></i></span></h3></div>
 			   </div>
                         </div>
                     </div>
@@ -173,6 +174,8 @@ some grid stats (#running jobs, etc.) -> see with JdF
     <!--[if IE]><script type="text/javascript" src="../js/excanvas.js"></script><![endif]-->
     <script src="../js/coolclock.js"></script>
     <script src="../js/moreskins.js"></script>
+    <script src="../dist/pingjs/ping.js"></script>
+    <script src="../js/dashboard.js"></script>
 }
 
 </body>
