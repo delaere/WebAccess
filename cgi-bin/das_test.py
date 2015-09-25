@@ -194,14 +194,21 @@ def main():
     jsondict1 = get_data(host, query1, idx, 1, debug, thr, ckey, cert, das_h)
     #jsondict2 = get_data(host, query2, idx, 1, debug, thr, ckey, cert, das_h)
     #jsondict3 = get_data(host, query3, idx, 1, debug, thr, ckey, cert, das_h)
-    if len(jsondict1)==1:
-    	#TODO we could validate further the result
-        outcome = { "result":"good", "data":jsondict1[0] }
-    else:
+    try:
+    	if len(jsondict1)==1 and jsondict1[0].get('status')== 'ok':
+    		#TODO we could validate further the result
+    	    outcome = { "result":"good", "data":jsondict1[0] }
+    	else:
+    	    outcome = { "result":"bad" }
+    	print "Content-Type: application/json"
+    	print
+    	print outcome
+    except:
 	outcome = { "result":"bad" }
-    print "Content-Type: application/json"
-    print
-    print outcome
+        print "Content-Type: application/json"
+        print
+        print outcome
+
 
 #
 # main
