@@ -61,20 +61,47 @@ function check_github() {
 	});
 }
 
+function check_das() {
+	// set the widget in update mode
+	$("#das").attr("class","alert alert-warning");
+	$("#das i").attr("class","fa fa-2x fa-refresh fa-spin text-warning");
+	// launch the test
+	$.ajax({
+        	url:       "/cgi-bin/das_test.py",
+        	cache:     false,
+        	dataType:  "text",
+        	success:   function(response) {
+			response = getJSON(response);
+			if(response.result==="good") {
+				// set the widget in success mode
+				$("#das").attr("class","alert alert-success");
+				$("#das i").attr("class","fa fa-2x fa-check-circle text-success");
+			} else {
+				// set the widget in success mode
+				$("#das").attr("class","alert alert-danger");
+				$("#das i").attr("class","fa fa-2x fa-times-circle text-danger");
+			}
+    		}
+	});
+
+}
+
+function getJSON(string) {
+	var re = /u\'([^\']*)\'/g; 
+	var subst = '\"$1\"'; 
+	string = string.replace(re, subst);
+	re = /\'([^\']*)\'/g;
+	string = string.replace(re, subst);
+	string = JSON.parse(string);
+	return string;
+}
+
 //TODO
 //SAMADhi: use php to connect to the db using mysql_ping (doing it with javascript would show credentials)
 // NO: in order to allow to rerun at will, use another cgi.
 
-// DAS: check https://cmsweb.cern.ch/das/status
-// using http://www.w3schools.com/jquery/ajax_get.asp -> will not work because it is cross-domain. Need to use a cgi... but then it will fail because of missing certificate 
-// solution: use the API as in SAMADhi DAS script
-
 // ingrid-ui* : cgi to run nmap on port 22
 //
-
-function check_das() {
-
-}
 
 function check_samadhi() {
 	
