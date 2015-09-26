@@ -37,10 +37,6 @@ function check_github() {
 		url: "https://status.github.com/api/last-message.json",
     		jsonp: "callback",
     		dataType: "jsonp",
-    		data: {
-		        q: "select title,abstract,url from search.news where query=\"cat\"",
-		        format: "json"
-		},
     		success: function( response ) {
 			if(response.status==="good") {
 				// set the widget in success mode
@@ -119,17 +115,68 @@ function check_samadhi() {
 			}
 		}
 	});
-	
 }
 
-//TODO
-// ingrid-ui* : cgi to run nmap on port 22
-
-
+//TODO: why does nmap return filtered for the servers when running as cgi 
+//while it returns open when I run in the shell???
 function check_ingridui1() {
-
+	// set the widget in update mode
+	$("#ui1").attr("class","alert alert-warning");
+	$("#ui1 i").attr("class","fa fa-2x fa-refresh fa-spin text-warning");
+	// launch the test
+	$.ajax({
+		url:       "/cgi-bin/ssh_test.py",
+		cache:     false,
+		dataType:  "text",
+    		data: { server: "ingrid-ui1.cism.ucl.ac.be" },
+		success:   function(response) {
+			response = JSON.parse(response);
+			if(response.result==="open" || response.result==="filtered") {
+				// set the widget in success mode
+				$("#ui1").attr("class","alert alert-success");
+				$("#ui1 i").attr("class","fa fa-2x fa-check-circle text-success");
+			} else {
+				// set the widget in failure mode
+				$("#ui1").attr("class","alert alert-danger");
+				$("#ui1 i").attr("class","fa fa-2x fa-times-circle text-danger");
+			}
+			// add the message as a popover
+			$("#ui1").attr("data-toggle","popover");
+			$("#ui1").attr("data-trigger","click");
+			$("#ui1").attr("title",response.result);
+			$("#ui1").attr("data-content","Responded in "+response.responseTime);
+			$("#ui1").popover({container: 'body'});
+		}
+	});
 }
 
 function check_ingridui2() {
-	
+	// set the widget in update mode
+	$("#ui2").attr("class","alert alert-warning");
+	$("#ui2 i").attr("class","fa fa-2x fa-refresh fa-spin text-warning");
+	// launch the test
+	$.ajax({
+		url:       "/cgi-bin/ssh_test.py",
+		cache:     false,
+		dataType:  "text",
+    		data: { server: "ingrid-ui2.cism.ucl.ac.be" },
+		success:   function(response) {
+			response = JSON.parse(response);
+			if(response.result==="open" || response.result==="filtered") {
+				// set the widget in success mode
+				$("#ui2").attr("class","alert alert-success");
+				$("#ui2 i").attr("class","fa fa-2x fa-check-circle text-success");
+			} else {
+				// set the widget in failure mode
+				$("#ui2").attr("class","alert alert-danger");
+				$("#ui2 i").attr("class","fa fa-2x fa-times-circle text-danger");
+			}
+			// add the message as a popover
+			$("#ui2").attr("data-toggle","popover");
+			$("#ui2").attr("data-trigger","click");
+			$("#ui2").attr("title",response.result);
+			$("#ui2").attr("data-content","Responded in "+response.responseTime);
+			$("#ui2").popover({container: 'body'});
+		}
+	});
 }
