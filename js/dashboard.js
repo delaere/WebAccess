@@ -47,7 +47,7 @@ function check_github() {
 				$("#gh").attr("class","alert alert-success");
 				$("#gh i").attr("class","fa fa-2x fa-check-circle text-success");
 			} else {
-				// set the widget in success mode
+				// set the widget in failure mode
 				$("#gh").attr("class","alert alert-danger");
 				$("#gh i").attr("class","fa fa-2x fa-times-circle text-danger");
 			}
@@ -56,7 +56,7 @@ function check_github() {
 			$("#gh").attr("data-trigger","click");
 			$("#gh").attr("title",response.created_on);
 			$("#gh").attr("data-content",response.body);
-			$("#gh").popover(); 
+			$("#gh").popover({container: 'body'}); 
     		}
 	});
 }
@@ -71,12 +71,13 @@ function check_das() {
         	cache:     false,
         	dataType:  "text",
         	success:   function(response) {
+			response = JSON.parse(response);
 			if(response.result==="good") {
 				// set the widget in success mode
 				$("#das").attr("class","alert alert-success");
 				$("#das i").attr("class","fa fa-2x fa-check-circle text-success");
 			} else {
-				// set the widget in success mode
+				// set the widget in failure mode
 				$("#das").attr("class","alert alert-danger");
 				$("#das i").attr("class","fa fa-2x fa-times-circle text-danger");
 			}
@@ -84,16 +85,46 @@ function check_das() {
 	});
 }
 
-//TODO
-//SAMADhi: use php to connect to the db using mysql_ping (doing it with javascript would show credentials)
-// NO: in order to allow to rerun at will, use another cgi.
-
-// ingrid-ui* : cgi to run nmap on port 22
-//
-
 function check_samadhi() {
+	// set the widget in update mode
+	$("#db").attr("class","alert alert-warning");
+	$("#db i").attr("class","fa fa-2x fa-refresh fa-spin text-warning");
+	// launch the test
+	$.ajax({
+		url:       "/cgi-bin/samadhi_test.py",
+		cache:     false,
+		dataType:  "text",
+		success:   function(response) {
+			response = JSON.parse(response);
+			if(response.result==="good") {
+				// set the widget in success mode
+				$("#db").attr("class","alert alert-success");
+				$("#db i").attr("class","fa fa-2x fa-check-circle text-success");
+				// add the message as a popover
+				$("#db").attr("data-toggle","popover");
+				$("#db").attr("data-trigger","click");
+				$("#db").attr("title","No error detected");
+				$("#db").attr("data-content","SAMADhi database up and running");
+				$("#db").popover({container: 'body'});
+			} else {
+				// set the widget in failure mode
+				$("#db").attr("class","alert alert-danger");
+				$("#db i").attr("class","fa fa-2x fa-times-circle text-danger");
+				// add the message as a popover
+				$("#db").attr("data-toggle","popover");
+				$("#db").attr("data-trigger","click");
+				$("#db").attr("title","Error "+response.error[0]);
+				$("#db").attr("data-content",response.error[1]);
+				$("#db").popover({container: 'body'});
+			}
+		}
+	});
 	
 }
+
+//TODO
+// ingrid-ui* : cgi to run nmap on port 22
+
 
 function check_ingridui1() {
 
