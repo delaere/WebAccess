@@ -170,11 +170,11 @@ def get_data(host, query, idx, limit, debug, threshold=300, ckey=None,
 def main():
     """Main function"""
     # TODO for testing
-    outcome = json.dumps({u'data': {u'dataset': [{u'nevents': 19899500, u'name': u'/TT_TuneCUETP8M1_13TeV-powheg-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM', u'size': 761727595644}, {u'datatype': u'mc', u'creation_time': u'2015-06-06 13:41:39', u'name': u'/TT_TuneCUETP8M1_13TeV-powheg-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM'}, {u'datatype': u'mc', u'creation_time': u'2015-06-06 13:41:39', u'name': u'/TT_TuneCUETP8M1_13TeV-powheg-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM'}, {u'name': u'/TT_TuneCUETP8M1_13TeV-powheg-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM'}]}, u'result': u'good'})
-    print "Content-Type: application/json"
-    print
-    print outcome
-    return
+    #outcome = json.dumps({u'data': {u'dataset': [{u'nevents': 19899500, u'name': u'/TT_TuneCUETP8M1_13TeV-powheg-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM', u'size': 761727595644}, {u'datatype': u'mc', u'creation_time': u'2015-06-06 13:41:39', u'name': u'/TT_TuneCUETP8M1_13TeV-powheg-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM'}, {u'datatype': u'mc', u'creation_time': u'2015-06-06 13:41:39', u'name': u'/TT_TuneCUETP8M1_13TeV-powheg-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM'}, {u'name': u'/TT_TuneCUETP8M1_13TeV-powheg-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM'}]}, u'result': u'good'})
+    #print "Content-Type: application/json"
+    #print
+    #print outcome
+    #return
 
     # get the options
     optmgr  = DASOptionParser()
