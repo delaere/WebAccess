@@ -71,7 +71,6 @@ function check_das() {
         	cache:     false,
         	dataType:  "text",
         	success:   function(response) {
-			response = getJSON(response);
 			if(response.result==="good") {
 				// set the widget in success mode
 				$("#das").attr("class","alert alert-success");
@@ -83,17 +82,6 @@ function check_das() {
 			}
     		}
 	});
-
-}
-
-function getJSON(string) {
-	var re = /u\'([^\']*)\'/g; 
-	var subst = '\"$1\"'; 
-	string = string.replace(re, subst);
-	re = /\'([^\']*)\'/g;
-	string = string.replace(re, subst);
-	string = JSON.parse(string);
-	return string;
 }
 
 //TODO
