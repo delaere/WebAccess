@@ -79,7 +79,6 @@ function onFileOpen(file) {
 				url:       "http://localhost/cgi-bin/getCanvas.py?file="+encodedfile+"&canvas="+encodedcanvas,
 				cache:     false,
 				dataType:  "text",
-				data:      { mode: 'info' },
 				success:   function(result) { 
 					var element = $('<div/>', {class:"col-lg-3 col-sm-4 col-xs-12"})
 						.append($('<div/>',{class:"thumbnail well drawing"})
