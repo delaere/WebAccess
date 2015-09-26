@@ -157,6 +157,7 @@ some grid stats (#running jobs, etc.) -> see with JdF
 		           <div class="panel-heading">Cluster status</div>
 		           <div class="panel-body" id="ingridStatus">
 				To be discussed with JdF.
+				<iframe style="min-height:400px;" src='http://cp3.irmp.ucl.ac.be' id="ingridStatusFrame" class="iframe" name='info' width="100%" height="100%" seamless="seamless" align="left"></iframe>
 		            </div>
                         </div>
                     </div>
