@@ -44,7 +44,7 @@
                 </div>
                 <!-- /.row -->
                 <div class="row">
-                    <div class="col-lg-6 col-xs-12">
+                    <div class="col-lg-4 col-xs-12">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 Time profile
@@ -53,12 +53,21 @@
                             </div>
                         </div>
 		    </div>
-                    <div class="col-lg-6 col-xs-12">
+                    <div class="col-lg-4 col-xs-12">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
-                                Samples Author
+                                Results Author
                             </div>
                             <div class="panel-body" id="authorsPlotContainer">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-xs-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                Number of sample(s) used
+                            </div>
+                            <div class="panel-body" id="samplesPlotContainer">
                             </div>
                         </div>
                     </div>

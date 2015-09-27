@@ -157,6 +157,42 @@ $(function(){
             }]
         });
         $("#authorsPlotContainer").siblings().filter(".panel-heading").html("Results author")
+        var resultsSamples = statistics["resultNsamples"];
+        $('#samplesPlotContainer').highcharts({
+            series: [{
+                name: "Samples",
+                data: resultsSamples
+            }],
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: ''
+            },
+            legend: {
+                enabled: false
+            },
+            xAxis: { 
+                title: {
+                    text:'Number of samples',
+                    align: 'high'
+                }
+            },
+            yAxis: { 
+                title: {
+                    text:'Number of results',
+                    align: 'high'
+                }
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0,
+                    borderWidth: 0,
+                    groupPadding: 0,
+                    shadow: false
+                }
+            }
+        });
     } );
     // radial gradiant
     Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, function (color) {
