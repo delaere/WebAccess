@@ -1,0 +1,362 @@
+$(function(){
+    //////////////////////////////////////////////////
+    // read the json file to fill in the page content
+    //////////////////////////////////////////////////
+    $.getJSON( "../data/DatasetsAnalysisReport.json", function( data  ) {
+        /////////////////////////////////////////////////
+        // database inconsistencies
+        /////////////////////////////////////////////////
+        var dbProblems = data["DatabaseInconsistencies"];
+        var dbProblems_pg = $("#WrongDatasets").find(".panel-group");
+        // set header for db inconsistencies
+        $("#numberOfWrongDatasets").html(dbProblems.length);
+        if(dbProblems.length==0) {
+            $("#WrongDatasets").addClass("hidden");
+        }
+        // fill db inconsistencies
+        for (i = 0; i < dbProblems.length; i++) {
+            dbProblems_pg.append(
+                $("<div />").addClass("panel panel-info").append(
+                    $("<div />").addClass("panel-heading").html(
+                        $("<h4 />").addClass("panel-title").html(
+                            $("<a />").attr({"data-toggle":"collapse", "data-parent":"#accordionB", "href":"#collapseB"+i}).html(
+                                dbProblems[i][0]["name"]+" (imported on "+dbProblems[i][0]["creation_time"]+")  "
+                            )
+                        ).append(
+                            $("<span />").addClass("label label-danger").html( 
+                                $("<strong />").html(dbProblems[i][1])
+                            )
+                        )
+                    )
+                ).append(
+                    $("<div />").addClass("panel-collapse collapse").attr({id: "collapseB"+i}).html(
+                        $("<div />").addClass("panel-body").html(
+                            $("<div />").addClass("table-responsive").html(
+                                $("<div />").addClass("table table-hover").html(
+                                    $("<tbody />").html($("<tr />").html("<td>Process</td><td>"+dbProblems[i][0]["process"]+"</td>")).append(
+                                        $("<tr />").html("<td>Type</td><td>"+dbProblems[i][0]["datatype"]+"</td>")).append(
+                                        $("<tr />").html("<td>Number of events</td><td>"+dbProblems[i][0]["nevents"]+"</td>")).append(
+                                        $("<tr />").html("<td>Size</td><td>"+dbProblems[i][0]["dsize"]+"</td>")).append(
+                                        $("<tr />").html("<td>Cross-section</td><td>"+dbProblems[i][0]["xsection"]+"</td>")).append(
+                                        $("<tr />").html("<td>CMSSW release</td><td>"+dbProblems[i][0]["cmssw_release"]+"</td>")).append(
+                                        $("<tr />").html("<td>Globaltag</td><td>"+dbProblems[i][0]["globaltag"]+"</td>")).append(
+                                        $("<tr />").html("<td>Energy</td><td>"+dbProblems[i][0]["energy"]+"</td>")).append(
+                                        $("<tr />").html("<td>Comment</td><td>"+dbProblems[i][0]["user_comment"]+"</td>")).append(
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        }
+        /////////////////////////////////////////////////
+        // Plots with db statistics
+        /////////////////////////////////////////////////
+        var statistics = data["DatasetsStatistics"];
+	// time profile
+        var datasetsTimeprof = statistics["datasetsTimeprof"];
+        $('#timeProfileContainer').highcharts({
+            chart: {
+                type: 'spline'
+            },
+            title: {
+                text: ''
+            },
+            legend: {
+                enabled: false
+            },
+            xAxis: { 
+                type: 'datetime',
+                title: {
+                    text:'Date',
+                    align: 'high'
+                }
+            },
+            yAxis: { 
+		min: 0,
+                title: {
+                    text:'Number of Datasets',
+                    align: 'high'
+                }
+            },
+            plotOptions: {
+                spline: {
+                    marker: {
+                        enabled: true
+                    }
+                }
+            },
+            series: [{
+                name: "SAMADhi",
+                data: datasetsTimeprof
+            }]
+        });
+	// globaltag
+        var globaltag = statistics["globaltag"];
+            $('#gtPlotContainer').highcharts({
+                chart: {
+                    type: 'pie',
+                    options3d: {
+                        enabled: true,
+                        alpha: 45,
+                        beta: 0
+                    }
+                },
+                title: {
+                    text: ''
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        //size: '85%',
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        depth: 35,
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.name}'
+                        }
+                    }
+                },
+                series: [{
+                    type: 'pie',
+                    name: 'Globaltag',
+            data: globaltag
+                }]
+            });
+	// type
+        var datatype = statistics["datatype"];
+            $('#typePlotContainer').highcharts({
+                chart: {
+                    type: 'pie',
+                    options3d: {
+                        enabled: true,
+                        alpha: 45,
+                        beta: 0
+                    }
+                },
+                title: {
+                    text: ''
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        //size: '85%',
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        depth: 35,
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.name}'
+                        }
+                    }
+                },
+                series: [{
+                    type: 'pie',
+                    name: 'Type',
+            data: datatype
+                }]
+            });
+	// release
+        var cmssw_release = statistics["cmssw_release"];
+            $('#releasePlotContainer').highcharts({
+                chart: {
+                    type: 'pie',
+                    options3d: {
+                        enabled: true,
+                        alpha: 45,
+                        beta: 0
+                    }
+                },
+                title: {
+                    text: ''
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        //size: '85%',
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        depth: 35,
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.name}'
+                        }
+                    }
+                },
+                series: [{
+                    type: 'pie',
+                    name: 'Release',
+            data: cmssw_release
+                }]
+            });
+	// release
+        var energy = statistics["energy"];
+            $('#energyPlotContainer').highcharts({
+                chart: {
+                    type: 'pie',
+                    options3d: {
+                        enabled: true,
+                        alpha: 45,
+                        beta: 0
+                    }
+                },
+                title: {
+                    text: ''
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        //size: '85%',
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        depth: 35,
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.name}'
+                        }
+                    }
+                },
+                series: [{
+                    type: 'pie',
+                    name: 'Energy',
+            data: energy
+                }]
+            });
+        // Number of events in datasets
+        var datasetsNevents = statistics["datasetsNevents"];
+        $('#datasetNeventsPlotContainer').highcharts({
+            series: [{
+                name: "Nevents",
+                data: datasetsNevents
+            }],
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: ''
+            },
+            legend: {
+                enabled: false
+            },
+            xAxis: { 
+                title: {
+                    text:'Number of Events',
+                    align: 'high'
+                }
+            },
+            yAxis: { 
+                type: 'logarithmic' ,
+                title: {
+                    text:'Number of Datasets',
+                    align: 'high'
+                }
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0,
+                    borderWidth: 0,
+                    groupPadding: 0,
+                    shadow: false
+                }
+            }
+        });
+        var datasetsDsize = statistics["datasetsDsize"];
+        $('#datasetSizePlotContainer').highcharts({
+            series: [{
+                name: "DSize",
+                data: datasetsDsize
+            }],
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: ''
+            },
+            legend: {
+                enabled: false
+            },
+            xAxis: { 
+                title: {
+                    text:'Size',
+                    align: 'high'
+                }
+            },
+            yAxis: { 
+                type: 'logarithmic' ,
+                title: {
+                    text:'Number of Datasets',
+                    align: 'high'
+                }
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0,
+                    borderWidth: 0,
+                    groupPadding: 0,
+                    shadow: false
+                }
+            }
+        });
+        var datasetsNsamples = statistics["datasetsNsamples"];
+        $('#datasetSamplesPlotContainer').highcharts({
+            series: [{
+                name: "Nsamples",
+                data: datasetsNsamples
+            }],
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: ''
+            },
+            legend: {
+                enabled: false
+            },
+            xAxis: { 
+                title: {
+                    text:'Samples',
+                    align: 'high'
+                }
+            },
+            yAxis: { 
+                type: 'logarithmic' ,
+                title: {
+                    text:'Number of Datasets',
+                    align: 'high'
+                }
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0,
+                    borderWidth: 0,
+                    groupPadding: 0,
+                    shadow: false
+                }
+            }
+        });
+    } );
+    // radial gradiant
+    Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, function (color) {
+        return {
+            radialGradient: {
+                cx: 0.5,
+                cy: 0.3,
+                r: 0.7
+            },
+            stops: [
+                [0, color],
+                [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
+            ]
+        };
+    });
+});
