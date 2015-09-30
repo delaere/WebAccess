@@ -6,7 +6,7 @@ $(function(){
         /////////////////////////////////////////////////
         // database inconsistencies
         /////////////////////////////////////////////////
-        var dbProblems = data["DatabaseInconsistencies"];
+        var dbProblems = data["DatabaseInconsistencies"].concat(data["IncompleteData"])
         var dbProblems_pg = $("#WrongDatasets").find(".panel-group");
         // set header for db inconsistencies
         $("#numberOfWrongDatasets").html(dbProblems.length);
@@ -19,7 +19,7 @@ $(function(){
                 $("<div />").addClass("panel panel-info").append(
                     $("<div />").addClass("panel-heading").html(
                         $("<h4 />").addClass("panel-title").html(
-                            $("<a />").attr({"data-toggle":"collapse", "data-parent":"#accordionB", "href":"#collapseB"+i}).html(
+                            $("<a />").attr({"data-toggle":"collapse", "data-parent":"#accordionA", "href":"#collapseA"+i}).html(
                                 dbProblems[i][0]["name"]+" (imported on "+dbProblems[i][0]["creation_time"]+")  "
                             )
                         ).append(
@@ -29,7 +29,7 @@ $(function(){
                         )
                     )
                 ).append(
-                    $("<div />").addClass("panel-collapse collapse").attr({id: "collapseB"+i}).html(
+                    $("<div />").addClass("panel-collapse collapse").attr({id: "collapseA"+i}).html(
                         $("<div />").addClass("panel-body").html(
                             $("<div />").addClass("table-responsive").html(
                                 $("<div />").addClass("table table-hover").html(
@@ -42,6 +42,49 @@ $(function(){
                                         $("<tr />").html("<td>Globaltag</td><td>"+dbProblems[i][0]["globaltag"]+"</td>")).append(
                                         $("<tr />").html("<td>Energy</td><td>"+dbProblems[i][0]["energy"]+"</td>")).append(
                                         $("<tr />").html("<td>Comment</td><td>"+dbProblems[i][0]["user_comment"]+"</td>")).append(
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        }
+        /////////////////////////////////////////////////
+        // orphan nodes
+        /////////////////////////////////////////////////
+        var orphans = data["Orphans"]
+        var orphans_pg = $("#OrphanDatasets").find(".panel-group");
+        // set header for db inconsistencies
+        $("#numberOfOrphanDatasets").html(orphans.length);
+        if(orphans.length==0) {
+            $("#OrphanDatasets").addClass("hidden");
+        }
+        // fill orphans
+        for (i = 0; i < orphans.length; i++) {
+            orphans_pg.append(
+                $("<div />").addClass("panel panel-info").append(
+                    $("<div />").addClass("panel-heading").html(
+                        $("<h4 />").addClass("panel-title").html(
+                            $("<a />").attr({"data-toggle":"collapse", "data-parent":"#accordionB", "href":"#collapseB"+i}).html(
+                                orphans[i]["name"]+" (imported on "+orphans[i]["creation_time"]+")  "
+                            )
+                        )
+                    )
+                ).append(
+                    $("<div />").addClass("panel-collapse collapse").attr({id: "collapseB"+i}).html(
+                        $("<div />").addClass("panel-body").html(
+                            $("<div />").addClass("table-responsive").html(
+                                $("<div />").addClass("table table-hover").html(
+                                    $("<tbody />").html($("<tr />").html("<td>Process</td><td>"+orphans[i]["process"]+"</td>")).append(
+                                        $("<tr />").html("<td>Type</td><td>"+orphans[i]["datatype"]+"</td>")).append(
+                                        $("<tr />").html("<td>Number of events</td><td>"+orphans[i]["nevents"]+"</td>")).append(
+                                        $("<tr />").html("<td>Size</td><td>"+orphans[i]["dsize"]+"</td>")).append(
+                                        $("<tr />").html("<td>Cross-section</td><td>"+orphans[i]["xsection"]+"</td>")).append(
+                                        $("<tr />").html("<td>CMSSW release</td><td>"+orphans[i]["cmssw_release"]+"</td>")).append(
+                                        $("<tr />").html("<td>Globaltag</td><td>"+orphans[i]["globaltag"]+"</td>")).append(
+                                        $("<tr />").html("<td>Energy</td><td>"+orphans[i]["energy"]+"</td>")).append(
+                                        $("<tr />").html("<td>Comment</td><td>"+orphans[i]["user_comment"]+"</td>")).append(
                                     )
                                 )
                             )
@@ -163,6 +206,7 @@ $(function(){
                 }]
             });
 	// release
+        // TODO: make a drill-down, grouping releases by major/minor id
         var cmssw_release = statistics["cmssw_release"];
             $('#releasePlotContainer').highcharts({
                 chart: {
@@ -197,8 +241,9 @@ $(function(){
             data: cmssw_release
                 }]
             });
-	// release
+	// energy
         var energy = statistics["energy"];
+        energy.forEach(function(entry){ entry[0] = String(entry[0])+" TeV"; })
             $('#energyPlotContainer').highcharts({
                 chart: {
                     type: 'pie',
@@ -270,6 +315,7 @@ $(function(){
                 }
             }
         });
+	// D size
         var datasetsDsize = statistics["datasetsDsize"];
         $('#datasetSizePlotContainer').highcharts({
             series: [{
@@ -307,6 +353,8 @@ $(function(){
                 }
             }
         });
+	// Number of samples
+        //TODO: make wider bars
         var datasetsNsamples = statistics["datasetsNsamples"];
         $('#datasetSamplesPlotContainer').highcharts({
             series: [{

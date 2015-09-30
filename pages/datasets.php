@@ -91,7 +91,7 @@
                     </div>
             </div><div class="row">
                 <div class="col-lg-12">
-                    <div class="panel panel-primary" id="WrongDatasets">
+                    <div class="panel panel-danger" id="WrongDatasets">
                         <div class="panel-heading">
                             Datasets with DAS inconsistencies <span class="badge" id="numberOfWrongDatasets"></span>
                         </div>
@@ -99,6 +99,21 @@
                         <div class="panel-body">
                             <div class="panel-group" id="accordionA">
 				<p>The following datasets are not consistent with DAS.</p>
+                            </div>
+                        </div>
+                        <!-- .panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <div class="col-lg-12">
+                    <div class="panel panel-warning" id="OrphanDatasets">
+                        <div class="panel-heading">
+                            Orphan datasets <span class="badge" id="numberOfOrphanDatasets"></span>
+                        </div>
+                        <!-- .panel-heading -->
+                        <div class="panel-body">
+                            <div class="panel-group" id="accordionB">
+				<p>The following datasets do not have any derived sample.</p>
                             </div>
                         </div>
                         <!-- .panel-body -->
