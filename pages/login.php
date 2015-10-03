@@ -129,7 +129,7 @@
     <script src="../bower_components/metisMenu/dist/metisMenu.min.js"></script>
 
     <!-- Custom Theme JavaScript -->
-    <script src="../dist/js/sb-admin-2.js"></script>
+    <script src="../js/webAccess.js"></script>
 
     <!-- Handling of "Remember me checkbox" -->
     <script>

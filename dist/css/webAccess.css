@@ -74,12 +74,14 @@
     outline: 0;
 }
 
+/* get the box around plots right */
 .drawing {
     border: 1px solid #ccc;
     padding: 5px;
     background: white;
 }
 
+/* get the big icons aligned on the dashboard */
 .fa-2x { 
     line-height: 0.5; 
 }
