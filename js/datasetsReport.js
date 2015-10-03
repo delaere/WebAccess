@@ -1,4 +1,10 @@
 $(function(){
+    // CREATE A FADE-IN METHOD FOR 3D-ARCS
+    Highcharts.wrap(Highcharts.SVGRenderer.prototype, 'arc3d', function (proceed) {
+        var result = proceed.apply(this, [].slice.call(arguments, 1));
+        result.fadeIn = result.show;
+        return result;
+    });
     //////////////////////////////////////////////////
     // read the json file to fill in the page content
     //////////////////////////////////////////////////
@@ -206,9 +212,37 @@ $(function(){
                 }]
             });
 	// release
-        // TODO: make a drill-down, grouping releases by major/minor id
         var cmssw_release = statistics["cmssw_release"];
-            $('#releasePlotContainer').highcharts({
+	var cmssw_release_pattern = /(CMSSW_(\d*)_(\d*)_(\d*))_?(.*)/;
+	var m;
+	var cmssw_drilldown = {};
+	var cmssw_data = [];
+	cmssw_drilldown.series = [];
+	cmssw_release.forEach(function(entry){
+		if ((m = cmssw_release_pattern.exec(entry[0])) !== null) {
+			var result = $.grep(cmssw_drilldown.series, function(e){ return e.id == m[1]; });
+			if(result.length==0) {
+				var drilldown_entry = {};
+				drilldown_entry.name = m[1];
+				drilldown_entry.id = m[1];
+				drilldown_entry.data = [[m[5],entry[1]]];
+				cmssw_drilldown.series.push(drilldown_entry);
+			} else if(result.length==1) {
+				result[0].data.push([m[5],entry[1]]);
+				
+			} else {
+				console.log("Error: two entries with same id");
+			}
+		}
+	});
+        cmssw_drilldown.series.forEach(function(entry){
+		var cmssw_data_entry = { name: entry.name, drilldown: entry.id, y:0};
+                entry.data.forEach(function(dataentry){
+			cmssw_data_entry.y += dataentry[1];
+                });
+		cmssw_data.push(cmssw_data_entry);
+        });
+	var releaseChart = {
                 chart: {
                     type: 'pie',
                     options3d: {
@@ -238,9 +272,11 @@ $(function(){
                 series: [{
                     type: 'pie',
                     name: 'Release',
-            data: cmssw_release
-                }]
-            });
+                    data: cmssw_data
+                }],
+	        drilldown: cmssw_drilldown
+            };
+	$('#releasePlotContainer').highcharts(releaseChart);
 	// energy
         var energy = statistics["energy"];
         energy.forEach(function(entry){ entry[0] = String(entry[0])+" TeV"; })
@@ -272,9 +308,10 @@ $(function(){
                     }
                 },
                 series: [{
-                    type: 'pie',
+                    //type: 'pie',
                     name: 'Energy',
-            data: energy
+		    colorByPoint: true,
+                    data: energy
                 }]
             });
         // Number of events in datasets
