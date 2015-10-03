@@ -157,7 +157,7 @@
     <!-- /#wrapper -->
 
     <?php include "stdScripts.html"; ?>
-
+    <script src="../bower_components/highcharts/modules/drilldown.js"></script>
     <script src="../js/datasetsReport.js"></script>
 
 </body>
