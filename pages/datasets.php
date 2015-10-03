@@ -53,7 +53,7 @@
                             </div>
                         </div>
 		    </div>
-                    <div class="col-lg-6 col-xs-12">
+                    <div class="col-lg-6 col-sm-6 col-xs-12">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 Dataset Globaltag
@@ -62,7 +62,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-xs-12">
+                    <div class="col-lg-6 col-sm-6 col-xs-12">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 Dataset Type
@@ -71,7 +71,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-xs-12">
+                    <div class="col-lg-6 col-sm-6 col-xs-12">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 CMSSW release
@@ -80,7 +80,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-xs-12">
+                    <div class="col-lg-6 col-sm-6 col-xs-12">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 CM Energy

@@ -160,16 +160,24 @@ $(function(){
                 },
                 plotOptions: {
                     pie: {
-                        //size: '85%',
                         allowPointSelect: true,
                         cursor: 'pointer',
                         depth: 35,
                         dataLabels: {
-                            enabled: true,
+                            enabled: false,
                             format: '{point.name}'
-                        }
+                        },
+			showInLegend: true
                     }
                 },
+		legend: {
+                	enabled: true,
+	                layout: 'horizontal',
+        	        align: 'center',
+                	width: 200,
+	                verticalAlign: 'bottom',
+        	        useHTML: true,
+            		},
                 series: [{
                     type: 'pie',
                     name: 'Globaltag',
@@ -195,14 +203,14 @@ $(function(){
                 },
                 plotOptions: {
                     pie: {
-                        //size: '85%',
                         allowPointSelect: true,
                         cursor: 'pointer',
                         depth: 35,
                         dataLabels: {
-                            enabled: true,
+                            enabled: false,
                             format: '{point.name}'
-                        }
+                        },
+			showInLegend: true
                     }
                 },
                 series: [{
@@ -220,11 +228,12 @@ $(function(){
 	cmssw_drilldown.series = [];
 	cmssw_release.forEach(function(entry){
 		if ((m = cmssw_release_pattern.exec(entry[0])) !== null) {
-			var result = $.grep(cmssw_drilldown.series, function(e){ return e.id == m[1]; });
+			var release = m[2]+"."+m[3]+"."+m[4];
+			var result = $.grep(cmssw_drilldown.series, function(e){ return e.id == release; });
 			if(result.length==0) {
 				var drilldown_entry = {};
-				drilldown_entry.name = m[1];
-				drilldown_entry.id = m[1];
+				drilldown_entry.name = release;
+				drilldown_entry.id = release;
 				drilldown_entry.data = [[m[5],entry[1]]];
 				cmssw_drilldown.series.push(drilldown_entry);
 			} else if(result.length==1) {
@@ -264,9 +273,10 @@ $(function(){
                         cursor: 'pointer',
                         depth: 35,
                         dataLabels: {
-                            enabled: true,
+                            enabled: false,
                             format: '{point.name}'
-                        }
+                        },
+			showInLegend: true
                     }
                 },
                 series: [{
@@ -302,9 +312,10 @@ $(function(){
                         cursor: 'pointer',
                         depth: 35,
                         dataLabels: {
-                            enabled: true,
+                            enabled: false,
                             format: '{point.name}'
-                        }
+                        },
+			showInLegend: true
                     }
                 },
                 series: [{
