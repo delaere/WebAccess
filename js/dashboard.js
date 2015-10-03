@@ -117,8 +117,6 @@ function check_samadhi() {
 	});
 }
 
-//TODO: why does nmap return filtered for the servers when running as cgi 
-//while it returns open when I run in the shell???
 function check_ingridui1() {
 	// set the widget in update mode
 	$("#ui1").attr("class","alert alert-warning");
@@ -131,7 +129,7 @@ function check_ingridui1() {
     		data: { server: "ingrid-ui1.cism.ucl.ac.be" },
 		success:   function(response) {
 			response = JSON.parse(response);
-			if(response.result==="open" || response.result==="filtered") {
+			if(response.result==="open") {
 				// set the widget in success mode
 				$("#ui1").attr("class","alert alert-success");
 				$("#ui1 i").attr("class","fa fa-2x fa-check-circle text-success");
@@ -162,7 +160,7 @@ function check_ingridui2() {
     		data: { server: "ingrid-ui2.cism.ucl.ac.be" },
 		success:   function(response) {
 			response = JSON.parse(response);
-			if(response.result==="open" || response.result==="filtered") {
+			if(response.result==="open") {
 				// set the widget in success mode
 				$("#ui2").attr("class","alert alert-success");
 				$("#ui2 i").attr("class","fa fa-2x fa-check-circle text-success");
