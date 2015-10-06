@@ -1,11 +1,9 @@
-//TODO revert to ROOT.draw for popup
 //TODO investigate the use of a single call to the backend (should be faster but less flexible)
 
 // callback function called to populate the page from the ROOT file
 // called when ROOT is ready
 function createmyGUI() {
     window.filename = QueryString.result;
-    if (QueryString.render==="true") $("#renderLocal").bootstrapToggle('on');
     $.getJSON( "../data/ResultsAnalysisReport.json?salt="+makeid(), createGUI);
 }
 
@@ -185,6 +183,13 @@ function resizeAll() {
 
 // register event handlers
 $(function(){
+     // sets the toggle to the appropriate value
+     $("<input/>").attr("type","checkbox").attr("data-toggle","toggle")
+                  .attr("data-width","100%")
+                  .attr("data-on","Render canvases using JSROOT")
+                  .attr("data-off","Render canvases on the server")
+                  .attr("id","renderLocal").prop("checked",QueryString.render==="true").appendTo($("#renderLocalContainer"));
+     $("#renderLocal").bootstrapToggle();
      $('#histoGrid').on('dblclick',function(e) {
 	 // check that we actually clicked on a plot and get its name
 	 var hit = e.target.closest(".drawing");
@@ -227,10 +232,13 @@ $(function(){
 	  this.setAttribute("href",this.getAttribute("href").replace("render=true","render=false"));
         }
        });
+       $("#histoGrid").html("");
+       $.getJSON( "../data/ResultsAnalysisReport.json?salt="+makeid(), createGUI );
      });
 });
 
 // draw the modal window
+//TODO revert to ROOT.draw for popup
 function drawModal() {
 	// drawback of this method: we cannot interact with the zoomed plot
 	var id = $('#myModalLabel').attr("drawing");

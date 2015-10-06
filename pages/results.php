@@ -53,8 +53,7 @@
                       </div>
                     </form>
                     <form role="form">
-		      <div class="col-lg-4 col-md-4 col-sm-8 col-xs-8 clearfix">
-			<input type="checkbox" data-toggle="toggle" data-width="100%" data-on="Render canvases using JSROOT" data-off="Render canvases on the server" id="renderLocal">
+		      <div class="col-lg-4 col-md-4 col-sm-8 col-xs-8 clearfix" id="renderLocalContainer">
 		      </div>
 		      <div class="col-lg-4 col-xs-4 clearfix">
 			<button type="button" class="btn btn-success btn-block" id="SAMADhi">Open in SAMADhi</button>
