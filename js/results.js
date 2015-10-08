@@ -3,6 +3,7 @@
 // callback function called to populate the page from the ROOT file
 // called when ROOT is ready
 function createmyGUI() {
+    window.drawings = new Array();
     window.filename = QueryString.result;
     $.getJSON( "../data/ResultsAnalysisReport.json?salt="+makeid(), createGUI);
 }
@@ -61,6 +62,7 @@ function onFileOpen(file) {
 			try {
                         	JSROOT.draw("drawing_"+obj.fName, obj, "");
 			} catch(err) { } // ignore
+			window.drawings["drawing_"+obj.fName] = obj;
 			var svgElement = $("#drawing_"+obj.fName+" svg");
 			var ratio = svgElement.height()/svgElement.width(); 
 			var padding_tot = Number(svgElement.parent().css("padding-left").replace("px",""))+Number(svgElement.parent().css("padding-right").replace("px",""));
@@ -233,22 +235,27 @@ $(function(){
         }
        });
        $("#histoGrid").html("");
-       $.getJSON( "../data/ResultsAnalysisReport.json?salt="+makeid(), createGUI );
+       new JSROOT.TFile(window.filename, onFileOpen);
      });
 });
 
 // draw the modal window
-//TODO revert to ROOT.draw for popup
 function drawModal() {
-	// drawback of this method: we cannot interact with the zoomed plot
 	var id = $('#myModalLabel').attr("drawing");
 	$("#modal_plot").html("");
-	$("#"+id+" >svg").clone().appendTo($("#modal_plot"));
-	var svgElement = $("#modal_plot >svg");
-	var ratio = svgElement.height()/svgElement.width(); 
-	var padding_tot = Number(svgElement.parent().css("padding-left").replace("px",""))+Number(svgElement.parent().css("padding-right").replace("px",""));
-	svgElement.width(svgElement.parent().width()-padding_tot);
-	svgElement.height(svgElement.width()*ratio);
+        if(!$("#renderLocal").is(':checked')) {
+		// drawback of this method: we cannot interact with the zoomed plot
+		$("#"+id+" >svg").clone().appendTo($("#modal_plot"));
+		var svgElement = $("#modal_plot >svg");
+		var ratio = svgElement.height()/svgElement.width(); 
+		var padding_tot = Number(svgElement.parent().css("padding-left").replace("px",""))+Number(svgElement.parent().css("padding-right").replace("px",""));
+		svgElement.width(svgElement.parent().width()-padding_tot);
+		svgElement.height(svgElement.width()*ratio);
+	} else {
+		// slower and uses object stored in memory, but the plot is interactive
+		var objModal = window.drawings[id];
+		JSROOT.redraw("modal_plot", objModal, "");
+        }
 }
 
 // decode the URL
