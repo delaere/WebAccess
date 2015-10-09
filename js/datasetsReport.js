@@ -402,7 +402,6 @@ $(function(){
             }
         });
 	// Number of samples
-        //TODO: make wider bars
         var datasetsNsamples = statistics["datasetsNsamples"];
         $('#datasetSamplesPlotContainer').highcharts({
             series: [{
