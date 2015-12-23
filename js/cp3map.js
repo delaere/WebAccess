@@ -1,14 +1,17 @@
 $(function () { 
     // load building layouts
-    $('#cp3level1').css("min-height",$('#cp3level1').width());
+    var size = window.innerHeight < $('#cp3level1').width() ? window.innerHeight : $('#cp3level1').width();
+    $('#cp3level1').css("min-height",size);
     $('#cp3level1').svg({loadURL: 'CP3level1.svg', onLoad: mapCallback});
     $('#cp3level1').css("min-height",20);
     var svg1 = $('#cp3level1').svg('get');
-    $('#cp3level2').css("min-height",$('#cp3level2').width())
+    size = window.innerHeight < $('#cp3level2').width() ? window.innerHeight : $('#cp3level2').width();
+    $('#cp3level2').css("min-height",size)
     $('#cp3level2').svg({loadURL: 'CP3level2.svg', onLoad: mapCallback});
     $('#cp3level2').css("min-height",20);
     var svg2 = $('#cp3level2').svg('get');
-    $('#cp3level3').css("min-height",$('#cp3level3').width())
+    size = window.innerHeight < $('#cp3level3').width() ? window.innerHeight : $('#cp3level3').width();
+    $('#cp3level3').css("min-height",size)
     $('#cp3level3').svg({loadURL: 'CP3level3.svg', onLoad: mapCallback});
     $('#cp3level3').css("min-height",20);
     var svg3 = $('#cp3level3').svg('get');
