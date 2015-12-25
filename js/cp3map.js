@@ -1,5 +1,6 @@
 $(function () { 
     // load building layouts
+    window.pending = 3;
     var size = window.innerHeight < $('#cp3level1').width() ? window.innerHeight : $('#cp3level1').width();
     $('#cp3level1').css("min-height",size);
     $('#cp3level1').svg({loadURL: 'CP3level1.svg', onLoad: mapCallback});
@@ -15,7 +16,9 @@ $(function () {
     $('#cp3level3').svg({loadURL: 'CP3level3.svg', onLoad: mapCallback});
     $('#cp3level3').css("min-height",20);
     var svg3 = $('#cp3level3').svg('get');
-    //populate the form (combo box and list for search
+    // hide all
+    display(0,0); // arg1: form, arg2: level (bit array)
+    // populate the form (combo box and list for search )
     $.getJSON( "../data/towerE.json","salt="+makeid(), prepareForm );
     //register handlers for the form
     $('#sel1').on('change',function(){
@@ -40,7 +43,6 @@ $(function () {
         return false;
       }
     });
-
 });
 
 function findRoom(name) {
@@ -65,6 +67,9 @@ function highlightRoom(room) {
     var user3 = '#$1$2_user3';
     lastHighlight = $(room.replace(re, area));
     lastHighlight.css("fill","yellow");
+
+    // make sure that is it displayed
+    lastHighlight.parents('.hasSVG').css("display","block");
 
     // scroll there
     $('html, body').animate({
@@ -153,7 +158,6 @@ function fillmap(data, floor, svg) {
     var user1 = '#$1$2_user1'; 
     var user2 = '#$1$2_user2'; 
     var user3 = '#$1$2_user3'; 
-    //console.log(floor);
     
     for(var roomid=0;roomid<floor.length;roomid++) {
       var roomName = floor[roomid];
@@ -204,8 +208,74 @@ function fillmap(data, floor, svg) {
               $(svg).find(roomName.replace(re, user3)).html(room.user3);
       }
     }
+
+    // update global counter
+    window.pending--;
+
+    // react to command line args
+    if (!window.pending) handleRequest();
 }
 
 
 // another issue is how to handle the form/the parameters on the address line. 
 // for the demo, write another page with the room or user as argument. 
+//
+//
+// instead, we can detect args and then set display:none to the form, and the levels that are not necessary.
+
+function display(form, levels) {
+	// the form
+	if(form) {
+		$("#colform").css("display","block");
+	} else {
+		$("#colform").css("display","none");
+
+	}
+	// the levels
+	for(var i=0;i<3;i++) {
+		var state = ((levels>>i) & 0x1) ? "block" : "none";
+		$("#cp3level"+(i+1)).css("display",state);
+	}
+}
+
+function handleRequest() {
+    //parameters form the URL
+    var room = QueryString.room;
+    var username = QueryString.name;
+    console.log(room,username);
+    if((typeof room ==="undefined") && (typeof username === "undefined")) {
+        // display the full page
+    	display(1,7);
+    } else if(typeof room ==="string") {
+        // search for the room
+        highlightRoom($("#sel1").val());
+    } else if(typeof username ==="string") {
+        var room = findRoom(username);
+        highlightRoom(room);
+    }
+}
+
+// decode the URL
+var QueryString = function () {
+  // This function is anonymous, is executed immediately and 
+  // the return value is assigned to QueryString!
+  var query_string = {};
+  var query = window.location.search.substring(1);
+  var vars = query.split("&");
+  for (var i=0;i<vars.length;i++) {
+    var pair = vars[i].split("=");
+        // If first entry with this name
+    if (typeof query_string[pair[0]] === "undefined") {
+      query_string[pair[0]] = decodeURIComponent(pair[1]);
+        // If second entry with this name
+    } else if (typeof query_string[pair[0]] === "string") {
+      var arr = [ query_string[pair[0]],decodeURIComponent(pair[1]) ];
+      query_string[pair[0]] = arr;
+        // If third or later entry with this name
+    } else {
+      query_string[pair[0]].push(decodeURIComponent(pair[1]));
+    }
+  }
+    return query_string;
+}();
+

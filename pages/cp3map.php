@@ -55,7 +55,7 @@
             <div class="container-fluid">
                 <div class="row">
                   <!-- Form -->
-                  <div class="col-lg-6">
+                  <div class="col-lg-6" id="colform">
                     <div class="panel panel-default">
                       <div class="panel-heading">
                          Search and Selection
@@ -85,20 +85,14 @@
                     </div> <!-- panel -->
                   </div> <!-- col-lg-6 -->
                   <!-- Content -->
-                  <div class="col-lg-12">
+                  <div class="col-lg-12" id="cp3level1" data-floor="floor1">
 		      <h1 class="page-header">Level 1</h1>
 		  </div>
-                  <div class="col-lg-12" id="cp3level1" data-floor="floor1">
-		  </div>
-                  <div class="col-lg-12">
-		      <h1 class="page-header">Level 2</h1>
-                  </div>
                   <div class="col-lg-12" id="cp3level2" data-floor="floor2">
+		      <h1 class="page-header">Level 2</h1>
 		  </div>
-                  <div class="col-lg-12">
-		      <h1 class="page-header">Level 3</h1>
-                  </div>
                   <div class="col-lg-12" id="cp3level3" data-floor="floor3">
+		      <h1 class="page-header">Level 3</h1>
 		  </div>
                 </div>
             </div>  <!-- /.container-fluid -->
