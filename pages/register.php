@@ -78,8 +78,8 @@
             $result = $stmt->execute($query_params); 
         } 
         catch(PDOException $ex){ die("Failed to run query: " . $ex->getMessage()); } 
-        header("Location: index.html"); 
-        die("Redirecting to index.html"); 
+        header("Location: index.php");
+        die("Redirecting to index.php");
     } 
 ?>
 <!DOCTYPE html>
