@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-# enable debugging
+import sys
+sys.path.append('/usr/lib/root/')
 import cgi
 import cgitb
 cgitb.enable()

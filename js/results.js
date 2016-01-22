@@ -21,11 +21,12 @@ function makeid()
 
 // actually build the GUI after reading json 
 function createGUI(data) {
+    window.data = data;
     // fill in the combo box
     loadAvailableResults(data);
     // set the filename: 1. from URL (above); 2. from the combo
     if(window.filename === undefined) {
-        window.filename = $('#inputFile option:selected').text();
+        window.filename = data.SelectedResults[$('#inputFile')[0].selectedIndex][1]
     }
     if(window.filename === "") return;
     // set data-id of the button to the result id
@@ -73,10 +74,10 @@ function onFileOpen(file) {
                     });
 		} else if($.inArray( dirkeys[i].fClassName, [ "TCanvas" ]  )!== -1) { // this can be used to all objects not handled by JSROOT
 		        window.activeDownloads++;
-			encodedfile = encodeURIComponent("/home/delaer/public_html/pages/"+window.filename)
+			encodedfile = encodeURIComponent("/var/www/html/WebAccess/pages/"+window.filename)
 			encodedcanvas = encodeURIComponent(activeDir+"/"+dirkeys[i].fName)
 			$.ajax({
-				url:       "http://localhost/cgi-bin/getCanvas.py?file="+encodedfile+"&canvas="+encodedcanvas,
+				url:       "/cgi-bin/getCanvas.py?file="+encodedfile+"&canvas="+encodedcanvas,
 				cache:     false,
 				dataType:  "text",
 				success:   function(result) { 
@@ -153,7 +154,7 @@ function loadAvailableResults(data) {
 	var results = data.SelectedResults;
 	var inputs = $("#inputFile");
 	for(var i=0;i<results.length;i++){
-		inputs.append($("<option/>").html(results[i][1]));
+		inputs.append($("<option/>").html(results[i][0]['path']));
 		if(results[i][1]===window.filename) {
 			$('#inputFile')[0].selectedIndex = i;
 		}
@@ -215,7 +216,7 @@ $(function(){
 	 window.setTimeout(resizeAll,500);
      });
      $('#inputFile').on('change',function(e){
-	 var newfilename = $("#inputFile option:selected").text();
+	 var newfilename = window.data.SelectedResults[$('#inputFile')[0].selectedIndex][1];
 	 window.location=window.location.origin+window.location.pathname+"?result="+encodeURIComponent(newfilename)+"&render="+$("#renderLocal").is(':checked');
      });
      $('#SAMADhi').click(function(){
