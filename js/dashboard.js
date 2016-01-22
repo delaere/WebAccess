@@ -4,7 +4,7 @@ $(function() {
 	$("#ping").mouseup(function(){
 		$(this).blur();		     
 	});
-	$.getJSON( "../data/stats.json", function( data ) {
+	$.getJSON( "../data/stats.json", "salt="+makeid(), function( data ) {
 		$("#nDatasets").html(data.nDatasets);
 		$("#nSamples").html(data.nSamples);
 		$("#nResults").html(data.nResults);
@@ -178,3 +178,15 @@ function check_ingridui2() {
 		}
 	});
 }
+
+function makeid()
+{
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < 5; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
+

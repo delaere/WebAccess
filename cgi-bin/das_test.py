@@ -165,16 +165,11 @@ def get_data(host, query, idx, limit, debug, threshold=300, ckey=None,
     for row in jsondict['data']:
         for key in drop_keys:
             del row[key]
-    return jsondict['data']
+    #return jsondict['data']
+    return jsondict
 
 def main():
     """Main function"""
-    # TODO for testing
-    #outcome = json.dumps({u'data': {u'dataset': [{u'nevents': 19899500, u'name': u'/TT_TuneCUETP8M1_13TeV-powheg-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM', u'size': 761727595644}, {u'datatype': u'mc', u'creation_time': u'2015-06-06 13:41:39', u'name': u'/TT_TuneCUETP8M1_13TeV-powheg-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM'}, {u'datatype': u'mc', u'creation_time': u'2015-06-06 13:41:39', u'name': u'/TT_TuneCUETP8M1_13TeV-powheg-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM'}, {u'name': u'/TT_TuneCUETP8M1_13TeV-powheg-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM'}]}, u'result': u'good'})
-    #print "Content-Type: application/json"
-    #print
-    #print outcome
-    #return
 
     # get the options
     optmgr  = DASOptionParser()
@@ -195,16 +190,15 @@ def main():
     #jsondict2 = get_data(host, query2, idx, 1, debug, thr, ckey, cert, das_h)
     #jsondict3 = get_data(host, query3, idx, 1, debug, thr, ckey, cert, das_h)
     try:
-    	if len(jsondict1)==1 and jsondict1[0].get('status')== 'ok':
-    		#TODO we could validate further the result
-    	    outcome = { "result":"good", "data":jsondict1[0] }
+    	if len(jsondict1["data"])==1 and jsondict1["status"]== 'ok':
+    	    outcome = { "result":"good", "data":jsondict1["data"][0] }
     	else:
-    	    outcome = { "result":"bad" }
+    	    outcome = { "result":"badbad", "exception":"false" }
     	print "Content-Type: application/json"
     	print
     	print json.dumps(outcome)
     except:
-	outcome = { "result":"bad" }
+	outcome = { "result":"except", "exception":"true" }
         print "Content-Type: application/json"
         print
     	print json.dumps(outcome)
