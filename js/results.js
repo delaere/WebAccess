@@ -114,7 +114,7 @@ function parseDirectory(dir,file,path, callback) {
 		if(keys[i].fClassName=="TDirectory") {
 	                parseDirectoryCount++;
 			file.ReadObject(path+"/"+keys[i].fName, function(obj) {
-				structure.push({ name:obj.dir_name, title:obj.fTitle, content:parseDirectory(obj,file,path+"/"+obj.dir_name,callback) });
+				structure.push({ name:obj.dir_name, title:obj.fTitle, content:parseDirectory(obj,file,"/"+obj.dir_name,callback) });
 				parseDirectoryCount--;
 				if(parseDirectoryCount===0 && lastItem && callback) callback();
 			});
