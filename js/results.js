@@ -1,5 +1,3 @@
-//TODO investigate the use of a single call to the backend (should be faster but less flexible)
-
 // callback function called to populate the page from the ROOT file
 // called when ROOT is ready
 function createmyGUI() {
@@ -37,7 +35,19 @@ function createGUI(data) {
 
 // called when the file is open
 function onFileOpen(file) {
-    window.fileStructure = parseDirectory(file,file,"",buildFileStructure);
+    $("#pleasewait").modal();
+    try {
+	var prevFilename = localStorage.getItem("results_rootFileName");
+	if(window.filename === prevFilename) {
+		var prevFileStructure = localStorage.getItem("results_fileStructure");
+		window.fileStructure = prevFileStructure ? prevFileStructure : parseDirectory(file,file,"",buildFileStructure);
+	} else {
+    		window.fileStructure = parseDirectory(file,file,"",buildFileStructure);
+	}
+	localStorage.setItem("results_rootFileName", window.filename);
+	localStorage.setItem("results_fileStructure", window.fileStructure);
+    } catch(err) { $("#pleasewait").modal("hide"); }
+    $("#pleasewait").modal("hide");
     var activeDir = QueryString.dir;
     var histoGrid = $("#histoGrid");
     var renderLocally = [ "TH1F"  ];
